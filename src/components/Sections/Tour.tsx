@@ -9,11 +9,12 @@ interface TourProps {
   difficulty: string;
   title: string;
   description: string;
-  price: number;
+  price: string | number;
   isBestSeller?: boolean;
   imagePosition?: "left" | "right";
   onReserve: () => void;
   index?: number;
+  FcRating?: number;
 }
 
 const TourCard: React.FC<TourProps> = ({

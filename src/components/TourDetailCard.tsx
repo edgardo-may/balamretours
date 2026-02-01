@@ -1,6 +1,6 @@
 // src/components/TourDetailCard.tsx
 import React from 'react';
-import { FaStar, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaUsers, FaCheck } from 'react-icons/fa';
+import { FaStar, FaMapMarkerAlt} from 'react-icons/fa';
 import type { Destination } from '../types/index';
 import { Link } from 'react-router-dom';
 

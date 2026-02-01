@@ -62,7 +62,7 @@ const ContactModal: React.FC<ContactModalProps> = ({
   };
 
   const getWhatsAppLink = () => {
-    const phoneNumber = '529851091608'; // Cambia este número si es necesario
+    const phoneNumber = '529983471258'; // Cambia este número si es necesario
     const message = generateWhatsAppMessage();
     return `https://wa.me/${phoneNumber}?text=${message}`;
   };
