@@ -19,7 +19,8 @@ const ContactModal: React.FC<ContactModalProps> = ({
     adults: 1,
     children: 0,
     date: '',
-    message: ''
+    message: '',
+    pickup: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -57,7 +58,8 @@ const ContactModal: React.FC<ContactModalProps> = ({
       `Adultos: ${formData.adults}\n` +
       `Niños: ${formData.children}\n` +
       `Fecha del viaje: ${formData.date || 'Por definir'}\n` +
-      `Mensaje adicional: ${formData.message || 'Ninguno'}\n\n` 
+      `Mensaje adicional: ${formData.message || 'Ninguno'}\n` +
+      `Niños: ${formData.pickup}\n\n` 
     );
   };
 
@@ -226,6 +228,19 @@ const ContactModal: React.FC<ContactModalProps> = ({
                   rows={3}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   placeholder="¿Algún requerimiento especial o pregunta adicional?"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Lugar de recogida
+                </label>
+                <input
+                  name="pickup"
+                  type="text"
+                  value={formData.pickup}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="¿Dónde deseas ser recogido?"
                 />
               </div>
 
