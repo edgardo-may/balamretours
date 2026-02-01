@@ -59,7 +59,7 @@ const ContactModal: React.FC<ContactModalProps> = ({
       `Niños: ${formData.children}\n` +
       `Fecha del viaje: ${formData.date || 'Por definir'}\n` +
       `Mensaje adicional: ${formData.message || 'Ninguno'}\n` +
-      `Niños: ${formData.pickup}\n\n` 
+      `Lugar de recogida: ${formData.pickup || 'No especificado'}\n\n` 
     );
   };
 
