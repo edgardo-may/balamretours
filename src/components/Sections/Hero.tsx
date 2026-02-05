@@ -10,16 +10,16 @@ const Hero: React.FC = () => {
   // Imágenes para el carrusel
   const heroImages = [
     {
-      url: 'src/assets/images/hero1.jpg',
+      url: '/images/hero1.jpg',
     },
     {
-      url: 'src/assets/images/hero2.jpg',
+      url: '/images/hero2.jpg',
     },
     {
-      url: 'src/assets/images/hero3.jpg',
+      url: '/images/hero3.jpg',
     },
     {
-      url: 'src/assets/images/hero4.jpg',
+      url: '/images/hero4.jpg',
     }
   ];
 
