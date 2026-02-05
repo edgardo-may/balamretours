@@ -73,7 +73,7 @@ const Destinations: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <Header onOpenContact={() => setContactModalOpen(true)} />
       
-      <main className="py-16">
+      <main className="top-16 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">Nuestros Destinos</h1>
