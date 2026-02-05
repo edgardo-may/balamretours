@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ChatWidget from '../components/Layout/ChatWidget';
 import Hero from '../components/Sections/Hero';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -18,7 +17,6 @@ const Home: React.FC = () => {
       <div className="fixed inset-0 pointer-events-none z-0 bg-grain opacity-50 mix-blend-multiply"></div>
       
       <Header onOpenContact={() => setContactModalOpen(true)} />
-      <ChatWidget />
       
       <main>
         <Hero />
