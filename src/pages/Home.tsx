@@ -8,6 +8,7 @@ import MapStats from '../components/Sections/MapStats';
 import Testimonials from '../components/Sections/Testimonials';
 import OurStorySimple from '../components/Sections/OurStory';
 import ContactForm from '../components/ContactForm';
+import ChatWidget from '../components/Layout/ChatWidget';
 
 const Home: React.FC = () => {
    const [contactModalOpen, setContactModalOpen] = useState<boolean>(false);
@@ -17,7 +18,7 @@ const Home: React.FC = () => {
       <div className="fixed inset-0 pointer-events-none z-0 bg-grain opacity-50 mix-blend-multiply"></div>
       
       <Header onOpenContact={() => setContactModalOpen(true)} />
-      
+      <ChatWidget />
       <main>
         <Hero />
         <Intro />

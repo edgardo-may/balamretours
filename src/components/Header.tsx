@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React, { useState, useEffect } from 'react';
 import { 
-  FaPlane, FaBars, FaTimes, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt 
+  FaPlane, FaBars, FaTimes
 } from 'react-icons/fa';
 import { motion, AnimatePresence, easeInOut } from 'framer-motion';
 import type { NavItem } from '../types/index';
@@ -30,22 +30,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
     { label: 'Testimonios', href: '/testimonios' },
     { label: 'Contacto', href: '/contact' }
   ];
-
-  // Animaciones
-  const topBarAnimation = {
-    initial: { y: -100, opacity: 0 },
-    animate: { 
-      y: 0, 
-      opacity: 1,
-      transition: {
-        type: "spring" as const,
-        stiffness: 100,
-        damping: 15,
-        delay: 0.1
-      }
-    }
-  } as const;
-
+  
   const headerAnimation = {
     initial: { y: -80, opacity: 0 },
     animate: { 
@@ -133,34 +118,10 @@ const Header: React.FC<HeaderProps> = ({ onOpenContact }) => {
 
   return (
     <>
-      {/* Barra superior de contacto */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 z-50 bg-blue-900 text-white py-2 px-4"
-        initial="initial"
-        animate={isMounted ? "animate" : "initial"}
-        variants={topBarAnimation}
-      >
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
-          <div className="flex items-center space-x-4 mb-2 md:mb-0">
-            <div className="flex items-center">
-              <FaPhoneAlt className="mr-2" />
-              <span>+1 (555) 123-4567</span>
-            </div>
-            <div className="flex items-center">
-              <FaEnvelope className="mr-2" />
-              <span>info@turismoaventura.com</span>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <FaMapMarkerAlt className="mr-2" />
-            <span>Calle Viajes 123, Ciudad Turística</span>
-          </div>
-        </div>
-      </motion.div>
-
+  
       {/* Navegación principal */}
       <motion.header 
-        className="fixed top-9 left-0 right-0 z-40 bg-white shadow-md"
+        className="fixed top-0 left-0 right-0 z-40 bg-white shadow-md"
         initial="initial"
         animate={isMounted ? "animate" : "initial"}
         variants={headerAnimation}
