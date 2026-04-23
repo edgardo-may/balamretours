@@ -4,6 +4,7 @@ import L from "leaflet";
 import { motion } from "framer-motion";
 import { mapLocations } from "../../data/mapLocations";
 import { AnimatedCounter } from "../animations/AnimatedCounter";
+import { useInView } from "../../hooks/useInView";
 
 // Fix for default marker icons in Leaflet
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -33,10 +34,8 @@ const archIcon = new L.Icon({
   className: "drop-shadow-lg",
 });
 
-import { useInView } from "../../hooks/useInView";
-
 const MapSection: React.FC = () => {
-  const [inViewRef, inView] = useInView({
+  const [inViewRef, inView] = useInView<HTMLElement>({
     triggerOnce: true,
     threshold: 0.1,
   });

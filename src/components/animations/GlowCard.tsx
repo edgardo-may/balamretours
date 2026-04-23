@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import type { FC, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 interface GlowCardProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   glowColor?: string;
 }
 
-const GlowCard: React.FC<GlowCardProps> = ({ 
+const GlowCard: FC<GlowCardProps> = ({ 
   children, 
   className = "", 
   glowColor = "rgba(20, 184, 166, 0.3)" 

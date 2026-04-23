@@ -1,14 +1,15 @@
 import React from 'react';
+import type { FC, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 interface FloatingElementProps {
-  children: React.ReactNode;
+  children: ReactNode;
   duration?: number;
   yOffset?: number;
   className?: string;
 }
 
-const FloatingElement: React.FC<FloatingElementProps> = ({ 
+const FloatingElement: FC<FloatingElementProps> = ({ 
   children, 
   duration = 3, 
   yOffset = 15,

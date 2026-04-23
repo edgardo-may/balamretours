@@ -1,14 +1,15 @@
 import React from 'react';
+import type { FC, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 interface StaggeredListProps {
-  children: React.ReactNode[];
+  children: ReactNode[];
   delay?: number;
   staggerDelay?: number;
   className?: string;
 }
 
-const StaggeredList: React.FC<StaggeredListProps> = ({ 
+const StaggeredList: FC<StaggeredListProps> = ({ 
   children, 
   delay = 0, 
   staggerDelay = 0.1,

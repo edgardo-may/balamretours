@@ -1,13 +1,14 @@
 import React from 'react';
+import type { FC, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 interface CardProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   hover?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ children, className = '', hover = true }) => {
+const Card: FC<CardProps> = ({ children, className = '', hover = true }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

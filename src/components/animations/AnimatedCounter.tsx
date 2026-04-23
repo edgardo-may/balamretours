@@ -16,7 +16,7 @@ export function AnimatedCounter({
   prefix = '',
   className = '',
 }: AnimatedCounterProps) {
-  const [ref, isInView] = useInView({ threshold: 0.5, triggerOnce: true });
+  const [ref, isInView] = useInView<HTMLSpanElement>({ threshold: 0.5, triggerOnce: true });
   const [count, setCount] = useState(0);
 
   useEffect(() => {

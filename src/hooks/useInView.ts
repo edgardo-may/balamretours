@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, RefObject } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import type { RefObject } from 'react';
 
 interface UseInViewOptions {
   threshold?: number;
@@ -6,19 +7,28 @@ interface UseInViewOptions {
   triggerOnce?: boolean;
 }
 
-export function useInView(options: UseInViewOptions = {}): [RefObject<any>, boolean] {
-  const { threshold = 0.1, rootMargin = '0px', triggerOnce = false } = options;
+/**
+ * Custom hook to detect if an element is in the viewport using Intersection Observer.
+ * @param options Intersection Observer options
+ * @returns [ref, isInView]
+ */
+export function useInView<T extends HTMLElement = HTMLDivElement>(
+  options: UseInViewOptions = {}
+): [RefObject<T | null>, boolean] {
+  const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
   const [isInView, setIsInView] = useState(false);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<T | null>(null);
 
   useEffect(() => {
+    const currentRef = ref.current;
+    if (!currentRef) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const isVisible = entry.isIntersecting;
-        if (isVisible) {
+        if (entry.isIntersecting) {
           setIsInView(true);
           if (triggerOnce) {
-            observer.unobserve(entry.target);
+            observer.unobserve(currentRef);
           }
         } else if (!triggerOnce) {
           setIsInView(false);
@@ -27,10 +37,7 @@ export function useInView(options: UseInViewOptions = {}): [RefObject<any>, bool
       { threshold, rootMargin }
     );
 
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    observer.observe(currentRef);
 
     return () => {
       if (currentRef) {
@@ -41,3 +48,5 @@ export function useInView(options: UseInViewOptions = {}): [RefObject<any>, bool
 
   return [ref, isInView];
 }
+
+export default useInView;

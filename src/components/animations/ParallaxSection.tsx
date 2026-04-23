@@ -1,18 +1,19 @@
 import React, { useRef } from 'react';
+import type { FC, ReactNode } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface ParallaxSectionProps {
-  children: React.ReactNode;
+  children: ReactNode;
   offset?: number;
   className?: string;
 }
 
-const ParallaxSection: React.FC<ParallaxSectionProps> = ({ 
+const ParallaxSection: FC<ParallaxSectionProps> = ({ 
   children, 
   offset = 50, 
   className = "" 
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
