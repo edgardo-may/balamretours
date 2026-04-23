@@ -38,7 +38,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden pointer-events-auto"
+              className="bg-white rounded-3xl w-full max-w-5xl shadow-2xl overflow-hidden pointer-events-auto"
             >
               <div className="flex items-center justify-between p-6 border-b border-slate-100">
                 <h3 className="text-xl font-bold text-slate-900">{title}</h3>
