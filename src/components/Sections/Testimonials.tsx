@@ -1,100 +1,79 @@
-// src/components/TestimonialsCarousel.tsx
-import React, { useState, useEffect } from 'react';
-import { TestimonialCard } from '../TestimonialCard';
-import type { Testimonial } from '../../types/index';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Star, Quote } from 'lucide-react';
+import { testimonials } from '../../data/tours';
 
-const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    name: "Sarah M.",
-    location: "New York, USA",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAmBbntlZGj7IyqfmpI7D6xQ5SSurHVXwD6E8-Ue0tQwBP1wTRMXcWuEO5W1ra6NYOHS9Nd6GrdO9yhDpcBsSV4NFZYC_aD_f4A_lUeh8Ya7no7UyHVTZmOpG6bzhBntV0rLp1QtczivywSfW7uB32bKzRoA-iwPoAQx7867cgW1LRDYuQAu_0Mvo8R_Zt5J9tISghlN9kbhQPL8r7EbPGwaKc_QY21oIQlSvNwFDGcwl16hG6PlkUBSoNnV3Fb8Qb7OwZp-0J5JcT",
-    rating: 5,
-    comment: "It wasn't just a tour; it was a spiritual journey. The cenote swim was unlike anything I've ever experienced on Earth. Truly magical."
-  },
-  {
-    id: 2,
-    name: "Carlos R.",
-    location: "Mexico City, Mexico",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    rating: 4,
-    comment: "Excelente guía y lugares espectaculares. Muy recomendable."
-  },
-  {
-    id: 3,
-    name: "Linda K.",
-    location: "London, UK",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    rating: 5,
-    comment: "Una experiencia inolvidable, los cenotes y ruinas fueron impresionantes."
-  },
-  {
-    id: 4,
-    name: "Miguel T.",
-    location: "Madrid, Spain",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
-    rating: 5,
-    comment: "Me encantó todo, especialmente los guías y la organización del tour."
-  }
-];
-
-const TestimonialsCarousel: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Auto rotación cada 5 segundos
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
+const Testimonials: React.FC = () => {
   return (
-    <section className="py-24 bg-background-light relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-6xl relative z-10 text-center">
-        <span className="material-symbols-outlined text-6xl text-primary/30 mb-6 block">
-          format_quote
-        </span>
+    <section id="testimonios" className="py-24 bg-slate-950 overflow-hidden relative">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px]" />
+      </div>
 
-        <h2 className="text-3xl md:text-4xl font-bold text-[#181411] mb-4">
-          Lo que dicen nuestros viajeros
-        </h2>
-
-        <p className="text-gray-500 max-w-2xl mx-auto mb-16">
-          Experiencias reales de personas que vivieron nuestros tours y descubrieron algo más que un viaje.
-        </p>
-
-        {/* Testimonial */}
-        <div className="relative max-w-md mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={testimonials[currentIndex].id}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.6 }}
-            >
-              <TestimonialCard testimonial={testimonials[currentIndex]} />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Dots */}
-          <div className="flex justify-center gap-2 mt-6">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentIndex ? 'bg-primary' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <h2 className="text-sm font-bold text-teal-400 uppercase tracking-widest mb-3">Testimonios</h2>
+          <h3 className="text-4xl md:text-5xl font-black text-white leading-tight">
+            Lo que dicen nuestros viajeros
+          </h3>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={testimonial.id}
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-[2rem] flex flex-col h-full relative group"
+            >
+              <Quote className="absolute top-6 right-8 w-12 h-12 text-white/10 group-hover:text-teal-400/20 transition-colors" />
+              
+              <div className="flex gap-1 mb-6">
+                {[...Array(testimonial.stars)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+
+              <p className="text-white/80 text-lg italic mb-8 flex-grow">
+                "{testimonial.text}"
+              </p>
+
+              <div className="flex items-center gap-4 mt-auto">
+                <img 
+                  src={testimonial.image} 
+                  alt={testimonial.name} 
+                  className="w-14 h-14 rounded-full object-cover border-2 border-teal-500/30"
+                />
+                <div>
+                  <h4 className="text-white font-bold">{testimonial.name}</h4>
+                  <p className="text-teal-400 text-sm font-medium">{testimonial.role}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-20 text-center"
+        >
+          <p className="text-white/60 font-medium mb-6">Más de 500 reseñas de 5 estrellas en plataformas globales</p>
+          <div className="flex justify-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
+            {/* Simple representation of review site logos */}
+            <span className="text-white text-xl font-black">TripAdvisor</span>
+            <span className="text-white text-xl font-black">Google</span>
+            <span className="text-white text-xl font-black">Viator</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-export default TestimonialsCarousel;
+export default Testimonials;
