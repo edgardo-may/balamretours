@@ -59,11 +59,13 @@ const Tours: FC<ToursProps> = ({ onSelectTour }) => {
               "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800";
             const cleanPath = imagePath?.replace(/^tour_images\//, "");
             const mainImage = cleanPath
-              ? getPublicImageUrl(cleanPath, "tour_images")
+              ? (getPublicImageUrl(cleanPath, "tour_images") ?? fallback)
               : fallback;
 
             // Pick first price
-            const priceData = Array.isArray(tour.prices) ? tour.prices[0] : (tour.prices as any);
+            const priceData = Array.isArray(tour.prices)
+              ? tour.prices[0]
+              : (tour.prices as any);
 
             const displayPrice = priceData
               ? Math.min(
