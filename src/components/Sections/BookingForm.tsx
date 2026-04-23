@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FC, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { Send, CheckCircle2, Calendar, Users, Mail, Phone, User } from 'lucide-react';
 import Button from '../Ui/Button';
@@ -9,7 +10,7 @@ interface BookingFormProps {
   onSuccess: () => void;
 }
 
-const BookingForm: React.FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
+const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ selectedTourId, onSuccess }) 
     tourId: selectedTourId || tours[0].id
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     

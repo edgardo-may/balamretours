@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FC } from 'react';
 import Navbar from './components/Sections/Navbar';
 import Hero from './components/Sections/Hero';
 import Tours from './components/Sections/Tours';
@@ -11,7 +12,7 @@ import FloatingWhatsApp from './components/Ui/FloatingWhatsApp';
 import Modal from './components/Ui/Modal';
 import BookingForm from './components/Sections/BookingForm';
 
-const App: React.FC = () => {
+const App: FC = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedTourId, setSelectedTourId] = useState<string | undefined>(undefined);
 

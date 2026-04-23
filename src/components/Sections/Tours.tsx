@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { motion } from "framer-motion";
 import { Clock, Star } from "lucide-react";
 import Card from "../Ui/Card";
@@ -9,7 +9,7 @@ interface ToursProps {
   onSelectTour: (tourId: string) => void;
 }
 
-const Tours: React.FC<ToursProps> = ({ onSelectTour }) => {
+const Tours: FC<ToursProps> = ({ onSelectTour }) => {
   return (
     <section id="tours" className="py-24 bg-slate-50">
       <div className="container mx-auto px-6">

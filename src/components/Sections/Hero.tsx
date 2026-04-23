@@ -1,9 +1,9 @@
-import React from 'react';
+import type { FC } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star } from 'lucide-react';
 import Button from '../Ui/Button';
 
-const Hero: React.FC = () => {
+const Hero: FC = () => {
   return (
     <section className="relative h-screen w-full flex items-center overflow-hidden">
       {/* Background Overlay */}
