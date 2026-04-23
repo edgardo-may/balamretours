@@ -26,11 +26,8 @@ export function useHomeTours() {
           .order("created_at", { ascending: false });
 
         if (supabaseError) throw supabaseError;
-
-        console.log("Supabase Data fetched:", data);
         setTours(data || []);
       } catch (err: any) {
-        console.error("Error fetching tours from Supabase:", err);
         setError(err.message);
       } finally {
         setLoading(false);

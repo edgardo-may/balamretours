@@ -124,7 +124,6 @@ const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
         onSuccess();
       }, 3000);
     } catch (err: any) {
-      console.error("Error submitting reservation:", err);
       alert("Error al enviar la reserva: " + err.message);
     } finally {
       setIsSubmitting(false);
