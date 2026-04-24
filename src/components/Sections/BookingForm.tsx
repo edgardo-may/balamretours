@@ -339,7 +339,7 @@ const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
             className={`w-full py-5 text-xl font-black rounded-2xl transition-all duration-300 ${
               !isValid
                 ? "bg-slate-200 text-slate-400 cursor-not-allowed border-none"
-                : "bg-teal-600 text-white shadow-lg shadow-teal-600/20 hover:scale-[1.02] active:scale-95"
+                : "bg-teal-600 text-black shadow-lg shadow-teal-600/20 hover:scale-[1.02] active:scale-95"
             }`}
             isLoading={isSubmitting}
           >

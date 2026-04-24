@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { motion } from "framer-motion";
-import { Clock, Star, Loader2 } from "lucide-react";
+import { Clock, Star, Loader2, ArrowRight } from "lucide-react";
 import Card from "../Ui/Card";
 import Button from "../Ui/Button";
 import { useHomeTours } from "../../hooks/useTours";
@@ -117,7 +117,7 @@ const Tours: FC<ToursProps> = ({ onSelectTour }) => {
                     </div>
                     <div className="absolute bottom-4 left-4 right-4 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                       <Button
-                        className="w-full bg-white text-black hover:bg-teal-600 hover:text-white border-none shadow-xl transition-all duration-300"
+                        className="w-full bg-white text-black hover:bg-teal-600 hover:text-black border-none shadow-xl transition-all duration-300"
                         onClick={() => onSelectTour(tour.id)}
                       >
                         Reservar Ahora
