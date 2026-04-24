@@ -61,5 +61,8 @@ export interface Reservation {
   pick_up?: string;
   estado: 'pendiente' | 'confirmada' | 'cancelada';
   cliente_id?: string;
+  nombre_cliente?: string;
+  email_cliente?: string;
+  telefono_cliente?: string;
   created_at?: string;
 }

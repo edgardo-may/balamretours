@@ -54,9 +54,8 @@ const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
   const selectedTour = tours.find((t) => t.id === formData.tourId);
 
   // Calculations
-  const priceData = Array.isArray(selectedTour?.prices)
-    ? selectedTour?.prices[0]
-    : selectedTour?.prices;
+  const prices = Array.isArray(selectedTour?.prices) ? selectedTour?.prices : (selectedTour?.prices ? [selectedTour?.prices] : []);
+  const priceData = prices[0];
   const adultPrice = (priceData as any)?.precio_adulto || 0;
   const childPrice = (priceData as any)?.precio_menor || 0;
   const numAdults = parseInt(formData.adults);
@@ -170,12 +169,13 @@ const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
     );
   }
 
-  const availableDates = (selectedTour?.availability || []).filter(
-    (d: any) => (d.cupos_disponibles || d.spots_available) > 0,
+  const availability = Array.isArray(selectedTour?.availability) ? selectedTour?.availability : (selectedTour?.availability ? [selectedTour?.availability] : []);
+  const availableDates = availability.filter(
+    (d: any) => (d.spots_available || d.cupos_disponibles) > 0,
   );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div id="booking-form" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       {/* Formulario */}
       <form
         onSubmit={handleSubmit}
@@ -244,8 +244,8 @@ const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
             >
               <option value="">Selecciona disponibilidad</option>
               {availableDates.map((d: any) => (
-                <option key={d.id} value={d.date || d.fecha}>
-                  {new Date(d.date || d.fecha).toLocaleDateString("es-MX", {
+                <option key={d.id} value={d.date}>
+                  {new Date(d.date).toLocaleDateString("es-MX", {
                     weekday: "long",
                     day: "numeric",
                     month: "long",
@@ -287,7 +287,7 @@ const BookingForm: FC<BookingFormProps> = ({ selectedTourId, onSuccess }) => {
             >
               {tours.map((tour) => (
                 <option key={tour.id} value={tour.id}>
-                  {tour.name || (tour as any).nombre}
+                  {tour.nombre}
                 </option>
               ))}
             </select>

@@ -8,40 +8,17 @@ import {
   Calendar,
   AlertCircle,
   ArrowLeft,
-  Loader2,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import Button from "../Ui/Button";
-import { useTourDetails } from "../../hooks/useTours";
+import type { TourWithDetails } from "../../types/tour";
 import { getPublicImageUrl } from "../../lib/supabase";
 
 interface TourDetailProps {
-  tourId: string;
+  tour: TourWithDetails;
   onBack: () => void;
-  onBook: () => void;
 }
 
-const TourDetail: FC<TourDetailProps> = ({ tourId, onBack, onBook }) => {
-  const { tour, loading, error } = useTourDetails(tourId);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <Loader2 className="w-10 h-10 text-teal-600 animate-spin mb-4" />
-        <p className="text-slate-500 font-medium">Cargando detalles...</p>
-      </div>
-    );
-  }
-
-  if (error || !tour) {
-    return (
-      <div className="text-center py-20">
-        <p className="text-red-500 font-bold mb-4">Error: {error || "Tour no encontrado"}</p>
-        <Button onClick={onBack}>Volver al listado</Button>
-      </div>
-    );
-  }
-
+const TourDetail: FC<TourDetailProps> = ({ tour, onBack }) => {
   const prices = Array.isArray(tour.prices) ? tour.prices : (tour.prices ? [tour.prices] : []);
   const mainPrice = prices[0]?.precio_adulto || 0;
   
@@ -178,7 +155,9 @@ const TourDetail: FC<TourDetailProps> = ({ tourId, onBack, onBook }) => {
               <Button
                 size="lg"
                 className="w-full bg-teal-500 text-black hover:bg-white transition-all py-8 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-teal-500/20"
-                onClick={onBook}
+                onClick={() => {
+                   document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
                 Reservar Ahora
               </Button>
