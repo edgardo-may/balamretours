@@ -27,7 +27,7 @@ const Home: FC = () => {
       
       <main>
         <Hero />
-        <Tours onSelectTour={handleOpenBooking} />
+        <Tours />
         <MapSection />
         <Benefits />
         <Testimonials />
