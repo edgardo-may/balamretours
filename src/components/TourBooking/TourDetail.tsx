@@ -1,217 +1,189 @@
-import { useState, type FC } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Star, 
-  Clock, 
-  MapPin, 
-  CheckCircle2, 
-  XCircle, 
-  Info,
-  ArrowLeft
+import type { FC } from "react";
+import {
+  Clock,
+  Star,
+  MapPin,
+  CheckCircle2,
+  XCircle,
+  Calendar,
+  AlertCircle,
+  ArrowLeft,
+  Loader2,
 } from "lucide-react";
-import type { TourWithDetails } from "../../types/tour";
-import { getPublicImageUrl } from "../../lib/supabase";
-import BookingForm from "./BookingForm";
+import { motion } from "framer-motion";
 import Button from "../Ui/Button";
+import { useTourDetails } from "../../hooks/useTours";
+import { getPublicImageUrl } from "../../lib/supabase";
 
 interface TourDetailProps {
-  tour: TourWithDetails;
+  tourId: string;
   onBack: () => void;
+  onBook: () => void;
 }
 
-const TourDetail: FC<TourDetailProps> = ({ tour, onBack }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+const TourDetail: FC<TourDetailProps> = ({ tourId, onBack, onBook }) => {
+  const { tour, loading, error } = useTourDetails(tourId);
 
-  const images = tour.images.length > 0 
-    ? tour.images.map(img => getPublicImageUrl(img.url, 'tour_images') || '')
-    : ['https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=1200'];
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <Loader2 className="w-10 h-10 text-teal-600 animate-spin mb-4" />
+        <p className="text-slate-500 font-medium">Cargando detalles...</p>
+      </div>
+    );
+  }
 
-  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  if (error || !tour) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-red-500 font-bold mb-4">Error: {error || "Tour no encontrado"}</p>
+        <Button onClick={onBack}>Volver al listado</Button>
+      </div>
+    );
+  }
+
+  const prices = Array.isArray(tour.prices) ? tour.prices : (tour.prices ? [tour.prices] : []);
+  const mainPrice = prices[0]?.precio_adulto || 0;
+  
+  const images = Array.isArray(tour.images) ? tour.images : (tour.images ? [tour.images] : []);
+  const mainImage = getPublicImageUrl(images.find(img => img.is_main)?.url || images[0]?.url, 'tour_images') || 
+    'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800';
+
+  // Procesar textos (vienen como strings en la DB)
+  const includesList = tour.incluye?.split('\n').filter(i => i.trim()) || [];
+  const excludesList = tour.no_incluye?.split('\n').filter(i => i.trim()) || [];
+  const recommendationsList = tour.recomendaciones?.split('\n').filter(i => i.trim()) || [];
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-24">
-      {/* Top Navbar Placeholder */}
-      <div className="container mx-auto px-6 py-8">
-        <button 
+    <div className="bg-white">
+      {/* Header / Hero Style */}
+      <div className="relative h-[400px] w-full">
+        <img
+          src={mainImage}
+          alt={tour.nombre}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <button
           onClick={onBack}
-          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 font-bold transition-colors group"
+          className="absolute top-6 left-6 flex items-center gap-2 text-white bg-black/20 backdrop-blur-md px-4 py-2 rounded-full hover:bg-black/40 transition-all"
         >
-          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-          <span>Volver al listado</span>
+          <ArrowLeft className="w-4 h-4" />
+          Volver
         </button>
+        <div className="absolute bottom-10 left-10 right-10">
+          <span className="bg-teal-500 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block">
+            {tour.categoria}
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black text-white drop-shadow-lg">
+            {tour.nombre}
+          </h2>
+          <div className="flex items-center gap-6 mt-4 text-white/90">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-teal-400" />
+              <span className="font-bold">{tour.ubicacion || 'Riviera Maya'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+              <span className="font-bold">5.0</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          
-          {/* Content Column */}
-          <div className="lg:col-span-2 space-y-12">
-            
-            {/* Gallery */}
-            <div className="relative h-[400px] md:h-[600px] rounded-[2rem] overflow-hidden shadow-2xl group">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentImageIndex}
-                  src={images[currentImageIndex]}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7 }}
-                  className="w-full h-full object-cover"
-                />
-              </AnimatePresence>
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              
-              <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
-                <div className="text-white">
-                   <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-teal-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
-                        {tour.category}
-                      </span>
-                   </div>
-                   <h1 className="text-4xl md:text-5xl font-black mb-2 leading-tight">{tour.name}</h1>
-                   <div className="flex items-center gap-4 text-slate-200">
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4 text-teal-400" />
-                        <span className="text-sm font-bold">{tour.location || 'Riviera Maya'}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Star className="w-4 h-4 fill-amber-400 text-amber-400 border-none" />
-                        <span className="text-sm font-bold">{tour.rating || 5.0} (Mock Rating)</span>
-                      </div>
-                   </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <button onClick={prevImage} className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white hover:text-black transition-all">
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button onClick={nextImage} className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white hover:text-black transition-all">
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Counter */}
-              <div className="absolute top-8 right-8 bg-black/40 backdrop-blur-md px-4 py-2 rounded-2xl text-white text-xs font-black tracking-widest">
-                {currentImageIndex + 1} / {images.length}
-              </div>
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Main Info */}
+          <div className="lg:col-span-8 space-y-10">
+            <div>
+              <h3 className="text-2xl font-black text-slate-900 mb-4">Sobre el Tour</h3>
+              <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                {tour.descripcion}
+              </p>
             </div>
 
-            {/* Description */}
-            <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-sm border border-slate-100">
-               <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
-                 <Info className="w-6 h-6 text-teal-600" />
-                 Acerca de esta experiencia
-               </h2>
-               <p className="text-slate-600 leading-relaxed text-lg mb-10 whitespace-pre-line">
-                 {tour.description}
-               </p>
-
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-slate-50">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Duración</span>
-                    <div className="flex items-center gap-2 text-slate-900 font-bold">
-                       <Clock className="w-4 h-4 text-teal-600" />
-                       {tour.duration}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Categoría</span>
-                    <span className="text-slate-900 font-bold capitalize">{tour.category}</span>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Idiomas</span>
-                    <span className="text-slate-900 font-bold">Español, Inglés</span>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Confirmación</span>
-                    <span className="text-slate-900 font-bold">Inmediata</span>
-                  </div>
-               </div>
-            </div>
-
-            {/* Lists Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {/* Que incluye */}
-               <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-                  <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-teal-600" />
-                    ¿Qué incluye?
-                  </h3>
-                  <ul className="space-y-4">
-                    {(tour.includes || [
-                      "Transportación redonda",
-                      "Guía certificado",
-                      "Equipo de snorkel",
-                      "Comida buffet",
-                      "Bebidas naturales"
-                    ]).map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-600 text-sm font-medium">
-                         <div className="mt-1 w-1.5 h-1.5 bg-teal-500 rounded-full flex-shrink-0" />
-                         {item}
-                      </li>
-                    ))}
-                  </ul>
-               </div>
-
-               {/* No incluye */}
-               <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-                  <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
-                    <XCircle className="w-5 h-5 text-red-500" />
-                    No incluye
-                  </h3>
-                  <ul className="space-y-4">
-                    {(tour.excludes || [
-                      "Propinas",
-                      "Souvenirs",
-                      "Fotos y video",
-                      "Impuesto de muelle ($15 USD)",
-                    ]).map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-600 text-sm font-medium">
-                         <div className="mt-1 w-1.5 h-1.5 bg-red-400 rounded-full flex-shrink-0" />
-                         {item}
-                      </li>
-                    ))}
-                  </ul>
-               </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-teal-600" />
+                  <span className="font-bold text-slate-700">Duración: {tour.duracion} {tour.duracion_tipo}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-5 h-5 text-teal-600" />
+                  <span className="font-bold text-slate-700">Categoría: {tour.categoria}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Recomendaciones */}
-            <div className="bg-teal-900 rounded-[2rem] p-8 md:p-12 text-white shadow-xl shadow-teal-900/20">
-               <h3 className="text-2xl font-black mb-8 flex items-center gap-3 text-teal-400">
-                 💡 Recomendaciones
-               </h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                 {(tour.recommendations || [
-                   "Llevar protector solar biodegradable",
-                   "Traje de baño y toalla",
-                   "Ropa cómoda y cambio de ropa",
-                   "Efectivo para gastos extras",
-                   "Cámara resistente al agua",
-                   "Repelente de insectos biodegradable"
-                 ]).map((rec, i) => (
-                   <div key={i} className="flex items-center gap-4">
-                      <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-xs text-teal-400">
-                        {i + 1}
-                      </div>
-                      <span className="text-sm font-medium text-slate-200">{rec}</span>
-                   </div>
-                 ))}
-               </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="bg-teal-50 p-6 rounded-2xl">
+                <h4 className="font-black text-teal-900 mb-4 uppercase tracking-widest text-sm flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" /> Incluye
+                </h4>
+                <ul className="space-y-3">
+                  {includesList.map((item: string, i: number) => (
+                    <li key={i} className="text-sm text-teal-800 flex items-start gap-2 italic">
+                      • {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-rose-50 p-6 rounded-2xl">
+                <h4 className="font-black text-rose-900 mb-4 uppercase tracking-widest text-sm flex items-center gap-2">
+                  <XCircle className="w-4 h-4" /> No Incluye
+                </h4>
+                <ul className="space-y-3">
+                  {excludesList.map((item: string, i: number) => (
+                    <li key={i} className="text-sm text-rose-800 flex items-start gap-2 italic">
+                      • {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
+            {recommendationsList.length > 0 && (
+              <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100">
+                <h4 className="font-black text-amber-900 mb-4 uppercase tracking-widest text-sm flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" /> Recomendaciones
+                </h4>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {recommendationsList.map((rec: string, i: number) => (
+                    <li key={i} className="text-sm text-amber-800 flex items-start gap-2">
+                      <span className="text-amber-500">•</span> {rec}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Booking Sidebar */}
-          <div className="lg:col-span-1">
-             <BookingForm tour={tour} />
-          </div>
+          <div className="lg:col-span-4">
+            <div className="sticky top-24 bg-slate-900 text-white p-8 rounded-[2rem] shadow-xl">
+              <div className="mb-6">
+                <span className="text-slate-400 text-xs font-bold uppercase tracking-widest block mb-2">Precio desde</span>
+                <div className="flex items-end gap-2">
+                  <span className="text-5xl font-black">${mainPrice}</span>
+                  <span className="text-teal-400 font-bold mb-1">MXN</span>
+                </div>
+              </div>
+              
+              <div className="space-y-4 mb-8">
+                <p className="text-sm text-slate-400 italic">
+                  * Precios sujetos a cambios según temporada y número de personas.
+                </p>
+              </div>
 
+              <Button
+                size="lg"
+                className="w-full bg-teal-500 text-black hover:bg-white transition-all py-8 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-teal-500/20"
+                onClick={onBook}
+              >
+                Reservar Ahora
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

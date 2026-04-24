@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import { Clock, Star, MapPin, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
 import Button from "../Ui/Button";
 import Card from "../Ui/Card";
 import type { TourWithDetails } from "../../types/tour";

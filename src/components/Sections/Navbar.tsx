@@ -6,6 +6,7 @@ import Button from "../Ui/Button";
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isHomePage = window.location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +15,8 @@ const Navbar: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const shouldBeSolid = !isHomePage || isScrolled;
 
   const navLinks = [
     { name: "Tours", href: "#tours" },
@@ -25,7 +28,7 @@ const Navbar: React.FC = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[80] transition-all duration-300 ${
-        isScrolled
+        shouldBeSolid
           ? "bg-white/80 backdrop-blur-md py-4 shadow-sm"
           : "bg-transparent py-6"
       }`}
@@ -33,7 +36,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-6 flex items-center justify-between">
         <a href="/" className="flex items-center gap-3">
           <div
-            className={`relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300 ${!isScrolled ? "bg-white/70 rounded-full p-2.5 shadow-sm" : ""}`}
+            className={`relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300 ${!shouldBeSolid ? "bg-white/70 rounded-full p-2.5 shadow-sm" : ""}`}
           >
             <img
               src="/images/logo-balam.png"
@@ -57,7 +60,7 @@ const Navbar: React.FC = () => {
             />
           </div>
           <span
-            className={`text-2xl font-black tracking-tighter ${isScrolled ? "text-slate-900" : "text-white"}`}
+            className={`text-2xl font-black tracking-tighter ${shouldBeSolid ? "text-slate-900" : "text-white"}`}
           >
             BALAM<span className="text-teal-500">RE</span>
           </span>
@@ -70,7 +73,7 @@ const Navbar: React.FC = () => {
               key={link.name}
               href={link.href}
               className={`text-sm font-semibold transition-colors ${
-                isScrolled
+                shouldBeSolid
                   ? "text-slate-600 hover:text-teal-600"
                   : "text-white/80 hover:text-white"
               }`}
@@ -99,9 +102,9 @@ const Navbar: React.FC = () => {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
-            <X className={isScrolled ? "text-slate-900" : "text-white"} />
+            <X className={shouldBeSolid ? "text-slate-900" : "text-white"} />
           ) : (
-            <Menu className={isScrolled ? "text-slate-900" : "text-white"} />
+            <Menu className={shouldBeSolid ? "text-slate-900" : "text-white"} />
           )}
         </button>
       </div>

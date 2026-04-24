@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Search, Filter, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import type { TourFilters as TourFiltersType, TourSortOrder } from "../../hooks/useTours";
 
 interface FiltersProps {
