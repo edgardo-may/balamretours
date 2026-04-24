@@ -127,13 +127,13 @@ const TourList: FC<TourListProps> = ({ onSelectTour }) => {
                   <TourCard
                     key={tour.id}
                     tour={tour}
-                    onViewDetails={onSelectTour}
+                    onClick={() => onSelectTour(tour.id)}
                   />
                 ) : (
                   <TourListItem
                     key={tour.id}
                     tour={tour}
-                    onViewDetails={onSelectTour}
+                    onClick={() => onSelectTour(tour.id)}
                   />
                 ),
               )}

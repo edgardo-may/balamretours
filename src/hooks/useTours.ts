@@ -14,19 +14,17 @@ export function useHomeTours() {
 
         const { data, error: supabaseError } = await supabase
           .from("tours")
-          .select(
-            `
+          .select(`
             *,
             prices:precio_tours(*),
             images:tour_images(*),
             availability:tour_fechas_disponibilidad(*)
-          `,
-          )
+          `)
           .eq("principal", true)
           .order("created_at", { ascending: false });
 
         if (supabaseError) throw supabaseError;
-        setTours(data || []);
+        setTours(data as TourWithDetails[] || []);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -68,12 +66,8 @@ export function useTours(filters?: TourFilters, sortBy: TourSortOrder = "newest"
         `);
 
       if (filters?.category && filters.category !== "all") {
-        query = query.eq("category", filters.category);
+        query = query.eq("categoria", filters.category);
       }
-
-      // Note: Price filtering is tricky with nested structures in Supabase JS client
-      // Often better to filter price in-memory or use a view/RPC if performance is an issue.
-      // For now, we'll fetch and then filter if needed, or just let the query handle basic fields.
 
       const { data, error: supabaseError } = await query;
 
@@ -84,7 +78,9 @@ export function useTours(filters?: TourFilters, sortBy: TourSortOrder = "newest"
       // Manual filtering for prices if provided
       if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
         processedData = processedData.filter(tour => {
-          const minAdultPrice = Math.min(...tour.prices.map(p => p.precio_adulto || Infinity));
+          const prices = Array.isArray(tour.prices) ? tour.prices : (tour.prices ? [tour.prices] : []);
+          if (prices.length === 0) return true;
+          const minAdultPrice = Math.min(...prices.map(p => p.precio_adulto || Infinity));
           const matchesMin = filters.minPrice !== undefined ? minAdultPrice >= filters.minPrice : true;
           const matchesMax = filters.maxPrice !== undefined ? minAdultPrice <= filters.maxPrice : true;
           return matchesMin && matchesMax;
@@ -93,14 +89,18 @@ export function useTours(filters?: TourFilters, sortBy: TourSortOrder = "newest"
 
       // Date availability filtering
       if (filters?.date) {
-        processedData = processedData.filter(tour => 
-          tour.availability.some(a => a.date === filters.date && a.spots_available > 0)
-        );
+        processedData = processedData.filter(tour => {
+          const avail = Array.isArray(tour.availability) ? tour.availability : (tour.availability ? [tour.availability] : []);
+          return avail.some(a => a.date === filters.date && a.spots_available > 0);
+        });
       }
 
       // Sorting
       processedData.sort((a, b) => {
-        const getMinPrice = (t: TourWithDetails) => Math.min(...t.prices.map(p => p.precio_adulto || 0));
+        const getMinPrice = (t: TourWithDetails) => {
+          const prices = Array.isArray(t.prices) ? t.prices : (t.prices ? [t.prices] : []);
+          return prices.length > 0 ? Math.min(...prices.map(p => p.precio_adulto || 0)) : 0;
+        };
         
         switch (sortBy) {
           case "price_asc":
@@ -108,7 +108,7 @@ export function useTours(filters?: TourFilters, sortBy: TourSortOrder = "newest"
           case "price_desc":
             return getMinPrice(b) - getMinPrice(a);
           case "popularity":
-            return (b.rating || 0) - (a.rating || 0);
+            return (b.principal ? 1 : 0) - (a.principal ? 1 : 0);
           case "newest":
           default:
             return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
@@ -153,7 +153,7 @@ export function useTourDetails(id: string | null) {
           .single();
 
         if (supabaseError) throw supabaseError;
-        setTour(data);
+        setTour(data as TourWithDetails);
       } catch (err: any) {
         setError(err.message);
       } finally {

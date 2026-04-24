@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useToursCatalog } from "../../hooks/useToursCatalog";
 import ToursFilters from "./ToursFilters";
 import { TourCardPro } from "./TourCardPro";
-import { Grid, List, LayoutGrid, SlidersHorizontal, Loader2, SearchX } from "lucide-react";
+import { List, LayoutGrid, SearchX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../Sections/Navbar";
 import Footer from "../Sections/Footer";

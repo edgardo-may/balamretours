@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 export function useBooking() {
   const [loading, setLoading] = useState(false);
 
-  const createReservation = async (reservation: Omit<Reservation, 'id' | 'folio' | 'status' | 'created_at'>) => {
+  const createReservation = async (reservation: Omit<Reservation, 'id' | 'folio_reservacion' | 'estado' | 'created_at'>) => {
     try {
       setLoading(true);
       
@@ -17,8 +17,8 @@ export function useBooking() {
 
       const newReservation: Reservation = {
         ...reservation,
-        folio,
-        status: 'pending',
+        folio_reservacion: folio,
+        estado: 'pendiente',
       };
 
       const { data, error } = await supabase
