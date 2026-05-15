@@ -5,6 +5,7 @@ import type { TourWithDetails } from "../types/tour";
 export interface CatalogFilters {
   search: string;
   category: string;
+  tourType: 'all' | 'colectivo' | 'privado';
   minPrice: number;
   maxPrice: number;
   duration: string;
@@ -21,8 +22,9 @@ export function useToursCatalog() {
   const [filters, setFilters] = useState<CatalogFilters>({
     search: "",
     category: "all",
+    tourType: "all",
     minPrice: 0,
-    maxPrice: 10000,
+    maxPrice: 5000,
     duration: "all",
     date: "",
   });
@@ -83,6 +85,11 @@ export function useToursCatalog() {
     // Category
     if (filters.category !== "all") {
       result = result.filter(t => t.categoria === filters.category);
+    }
+
+    // Tour Type (colectivo / privado)
+    if (filters.tourType !== "all") {
+      result = result.filter(t => t.tipo_tour === filters.tourType);
     }
 
     // Prices

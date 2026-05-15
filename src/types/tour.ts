@@ -14,10 +14,26 @@ export interface DBTour {
   nivel: string;
   idiomas: string;
   tags: string;
+  tipo_tour: 'colectivo' | 'privado';
   activo: boolean;
   principal: boolean;
+  oferta: boolean;
+  precio_oferta?: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface DBOffer {
+  id: string;
+  tour_id: string;
+  titulo: string;
+  descripcion: string;
+  descuento: number;
+  precio_original: number;
+  precio_oferta: number;
+  activa: boolean;
+  fecha_fin?: string;
+  created_at: string;
 }
 
 export interface DBTourPrice {
