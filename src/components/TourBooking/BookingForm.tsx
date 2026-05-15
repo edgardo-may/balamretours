@@ -1,4 +1,5 @@
-import { useState, useMemo, type FC } from "react";
+import { useState, useMemo, useRef, useEffect, type FC } from "react";
+import { toast } from "sonner";
 import {
   Calendar,
   Users,
@@ -9,9 +10,12 @@ import {
   ShoppingCart,
   Loader2,
   CheckCircle2,
+  ChevronDown,
 } from "lucide-react";
 import type { TourWithDetails } from "../../types/tour";
 import { useBooking } from "../../hooks/useBooking";
+import { useTourDates } from "../../hooks/useTourDates";
+import TourCalendar from "./TourCalendar";
 import Button from "../Ui/Button";
 
 interface BookingFormProps {
@@ -20,7 +24,21 @@ interface BookingFormProps {
 
 const BookingForm: FC<BookingFormProps> = ({ tour }) => {
   const { createReservation, loading } = useBooking();
+  const { dates: tourDates, loading: loadingDates } = useTourDates(tour.id);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (showCalendar && calendarRef.current) {
+      setTimeout(() => {
+        calendarRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 50);
+    }
+  }, [showCalendar]);
   const [formData, setFormData] = useState({
     fecha: "",
     adultos: 1,
@@ -47,8 +65,13 @@ const BookingForm: FC<BookingFormProps> = ({ tour }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.fecha) {
+      toast.error("Por favor, selecciona una fecha en el calendario.");
+      return;
+    }
     const result = await createReservation({
       tour_id: tour.id,
+      tour_nombre: tour.nombre, // passed to Edge Function for email
       fecha: formData.fecha,
       adultos: formData.adultos,
       menores: formData.ninos,
@@ -61,6 +84,24 @@ const BookingForm: FC<BookingFormProps> = ({ tour }) => {
 
     if (result.folio) {
       setSuccess(result.folio);
+      try {
+        await fetch(
+          "https://azfqkxithtocwgbysfjr.supabase.co/functions/v1/send-booking-email",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              nombre: formData.nombre,
+            }),
+          },
+        );
+      } catch (err) {
+        console.error("Error enviando email:", err);
+      }
     }
   };
 
@@ -109,16 +150,44 @@ const BookingForm: FC<BookingFormProps> = ({ tour }) => {
               <Calendar className="w-4 h-4 text-teal-600" />
               Fecha del Tour
             </label>
-            <input
-              type="date"
-              required
-              min={new Date().toISOString().split("T")[0]}
-              value={formData.fecha}
-              onChange={(e) =>
-                setFormData({ ...formData, fecha: e.target.value })
-              }
-              className="w-full bg-slate-50 border-none rounded-2xl px-5 py-4 text-sm font-medium focus:ring-2 focus:ring-teal-500 outline-none"
-            />
+            <div className="relative" ref={calendarRef}>
+              <button
+                type="button"
+                onClick={() => setShowCalendar(!showCalendar)}
+                className="w-full bg-slate-50 border-none rounded-2xl px-5 py-4 text-sm font-medium focus:ring-2 focus:ring-teal-500 outline-none text-left flex justify-between items-center"
+              >
+                <span
+                  className={
+                    formData.fecha ? "text-slate-900" : "text-slate-400"
+                  }
+                >
+                  {formData.fecha || "Selecciona una fecha..."}
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-slate-400 transition-transform ${showCalendar ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {showCalendar && (
+                <div className="absolute top-full left-0 w-full mt-2 z-50 shadow-2xl rounded-2xl bg-white border border-slate-100 overflow-hidden">
+                  <TourCalendar
+                    dates={tourDates}
+                    loading={loadingDates}
+                    selectedDate={formData.fecha}
+                    onSelectDate={(date) => {
+                      setFormData({ ...formData, fecha: date });
+                      setShowCalendar(false);
+                      setTimeout(() => {
+                        calendarRef.current?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "center",
+                        });
+                      }, 50);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Pax */}
