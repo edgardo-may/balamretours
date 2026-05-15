@@ -5,7 +5,6 @@ import {
   CreditCard,
   ChevronRight,
   ChevronDown,
-  Calendar,
 } from "lucide-react";
 import Button from "../Ui/Button";
 import { supabase } from "../../lib/supabase";
@@ -157,12 +156,6 @@ const BookingFormPro: FC<BookingFormProProps> = ({ tour }) => {
       </div>
     );
   }
-
-  const availability = Array.isArray(tour.availability)
-    ? tour.availability
-    : tour.availability
-      ? [tour.availability]
-      : [];
 
   return (
     <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-slate-50">
