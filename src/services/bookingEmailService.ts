@@ -2,7 +2,7 @@
 // Handles calling the Supabase Edge Function to send confirmation emails.
 // Call this AFTER a reservation is successfully created in the database.
 
-import { supabase } from '../lib/supabase';
+import { supabase } from "../lib/supabase";
 
 export interface BookingEmailPayload {
   booking_id: string;
@@ -28,21 +28,29 @@ interface EmailResult {
  * Invokes the `send-booking-confirmation` Supabase Edge Function.
  * Does NOT throw – returns a result object so the caller can handle gracefully.
  */
-export async function sendBookingConfirmation(payload: BookingEmailPayload): Promise<EmailResult> {
+export async function sendBookingConfirmation(
+  payload: BookingEmailPayload,
+): Promise<EmailResult> {
   try {
-    const { data, error } = await supabase.functions.invoke('send-booking-confirmation', {
-      body: payload,
-    });
+    const { data, error } = await supabase.functions.invoke(
+      "send-booking-confirmation",
+      {
+        body: payload,
+      },
+    );
 
     if (error) {
-      console.error('[bookingEmailService] Edge Function invocation error:', error);
+      console.error(
+        "[bookingEmailService] Edge Function invocation error:",
+        error,
+      );
       return { success: false, error: error.message };
     }
 
     return data as EmailResult;
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    console.error('[bookingEmailService] Unexpected error:', message);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("[bookingEmailService] Unexpected error:", message);
     return { success: false, error: message };
   }
 }
