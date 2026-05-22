@@ -1,86 +1,119 @@
 import React from 'react';
-import { Compass, Mail, Phone, MapPin } from 'lucide-react';
+import { MapPin, Mail, Phone } from 'lucide-react';
 import { FaFacebook, FaInstagram, FaXTwitter } from 'react-icons/fa6';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-900 text-white pt-20 pb-10">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-noche-950 text-white pt-16 pb-8">
+      <div className="container mx-auto px-5 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+
           {/* Brand */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center">
-                <Compass className="text-white w-6 h-6" />
+          <div className="space-y-5 lg:col-span-1">
+            <Link to="/" className="flex items-center gap-2.5">
+              <div className="w-10 h-10 bg-cenote-600 rounded-xl flex items-center justify-center">
+                <span className="text-white font-black text-sm">BR</span>
               </div>
-              <span className="text-2xl font-black tracking-tight">
-                BALAM<span className="text-teal-500">RE</span>
-              </span>
-            </div>
-            <p className="text-slate-400 leading-relaxed">
-              Experiencias auténticas y exclusivas en el corazón de la Riviera Maya. Redescubre el mundo maya con nosotros.
+              <div>
+                <span className="text-xl font-extrabold tracking-tight">
+                  BALAM<span className="text-cenote-400">RE</span>
+                </span>
+                <div className="text-2xs text-noche-500 font-medium tracking-widest uppercase">Riviera Maya</div>
+              </div>
+            </Link>
+            <p className="text-noche-400 text-sm leading-relaxed">
+              Experiencias auténticas y exclusivas en el corazón de la Riviera Maya. 
+              Guías locales, grupos pequeños y atención personalizada.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors">
-                <FaFacebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors">
-                <FaInstagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors">
-                <FaXTwitter className="w-5 h-5" />
-              </a>
+            <div className="flex gap-3">
+              {[
+                { icon: <FaFacebook className="w-4 h-4" />, href: "#" },
+                { icon: <FaInstagram className="w-4 h-4" />, href: "#" },
+                { icon: <FaXTwitter className="w-4 h-4" />, href: "#" },
+              ].map((social, i) => (
+                <a
+                  key={i}
+                  href={social.href}
+                  className="w-9 h-9 bg-white/6 hover:bg-cenote-600 rounded-xl flex items-center justify-center transition-colors"
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Tours */}
           <div>
-            <h4 className="text-lg font-bold mb-6">Explorar</h4>
-            <ul className="space-y-4">
-              <li><a href="#tours" className="text-slate-400 hover:text-teal-400 transition-colors">Tours Populares</a></li>
-              <li><a href="#beneficios" className="text-slate-400 hover:text-teal-400 transition-colors">Beneficios</a></li>
-              <li><a href="#testimonios" className="text-slate-400 hover:text-teal-400 transition-colors">Testimonios</a></li>
-              <li><a href="#" className="text-slate-400 hover:text-teal-400 transition-colors">Galería de Fotos</a></li>
+            <h4 className="font-bold mb-5 text-sm uppercase tracking-widest text-noche-300">Tours</h4>
+            <ul className="space-y-3">
+              {[
+                { label: "Tours Colectivos", to: "/tours?tipo=colectivo" },
+                { label: "Tours Privados", to: "/tours?tipo=privado" },
+                { label: "Ofertas Especiales", to: "/tours" },
+                { label: "Ver Todo el Catálogo", to: "/tours" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="text-noche-400 hover:text-cenote-300 transition-colors text-sm">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Info */}
           <div>
-            <h4 className="text-lg font-bold mb-6">Soporte</h4>
-            <ul className="space-y-4">
-              <li><a href="#" className="text-slate-400 hover:text-teal-400 transition-colors">Centro de Ayuda</a></li>
-              <li><a href="#" className="text-slate-400 hover:text-teal-400 transition-colors">Políticas de Cancelación</a></li>
-              <li><a href="#" className="text-slate-400 hover:text-teal-400 transition-colors">Preguntas Frecuentes</a></li>
-              <li><a href="#" className="text-slate-400 hover:text-teal-400 transition-colors">Privacidad</a></li>
+            <h4 className="font-bold mb-5 text-sm uppercase tracking-widest text-noche-300">Información</h4>
+            <ul className="space-y-3">
+              {[
+                "¿Por qué Balam RE?",
+                "Políticas de Cancelación",
+                "Preguntas Frecuentes",
+                "Privacidad y Términos",
+              ].map((link) => (
+                <li key={link}>
+                  <a href="#" className="text-noche-400 hover:text-cenote-300 transition-colors text-sm">
+                    {link}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-bold mb-6">Contacto</h4>
+            <h4 className="font-bold mb-5 text-sm uppercase tracking-widest text-noche-300">Contacto</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-teal-500 shrink-0" />
-                <span className="text-slate-400 text-sm">Playa del Carmen, Quintana Roo, México.</span>
+                <MapPin className="w-4 h-4 text-cenote-500 shrink-0 mt-0.5" />
+                <span className="text-noche-400 text-sm leading-relaxed">Playa del Carmen, Quintana Roo, México</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-teal-500 shrink-0" />
-                <span className="text-slate-400 text-sm">+52 (984) 123 4567</span>
+                <Phone className="w-4 h-4 text-cenote-500 shrink-0" />
+                <a href="tel:+529983471258" className="text-noche-400 hover:text-cenote-300 text-sm transition-colors">
+                  +52 (998) 347-1258
+                </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-teal-500 shrink-0" />
-                <span className="text-slate-400 text-sm">hola@balamretours.com</span>
+                <Mail className="w-4 h-4 text-cenote-500 shrink-0" />
+                <a href="mailto:hola@balamretours.com" className="text-noche-400 hover:text-cenote-300 text-sm transition-colors">
+                  hola@balamretours.com
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-slate-500 text-sm">
-            © 2024 Balam RE Tours. Todos los derechos reservados.
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-noche-500 text-xs">
+            © 2025 Balam RE Tours. Todos los derechos reservados.
           </p>
-          <div className="flex gap-6 text-sm text-slate-500 font-bold uppercase tracking-widest">
-            <span>Hecho con ❤️ en México</span>
+          <div className="flex items-center gap-1.5 text-noche-500 text-xs">
+            <span>Hecho con</span>
+            <span className="text-rose-400">❤️</span>
+            <span>en México</span>
           </div>
         </div>
       </div>

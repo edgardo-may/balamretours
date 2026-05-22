@@ -1,139 +1,153 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import Button from "../Ui/Button";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isHomePage = window.location.pathname === "/";
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const shouldBeSolid = !isHomePage || isScrolled;
 
   const navLinks = [
-    { name: "Tours", href: "#tours" },
-    { name: "Explorar", href: "#explorar" },
-    { name: "Beneficios", href: "#beneficios" },
-    { name: "Testimonios", href: "#testimonios" },
+    { name: "Tours Generales", href: isHomePage ? "#tours-generales" : "/tours?tipo=colectivo" },
+    { name: "Tours Privados", href: isHomePage ? "#tours-privados" : "/tours?tipo=privado" },
+    { name: "¿Por qué Balam?", href: isHomePage ? "#beneficios" : "/#beneficios" },
+    { name: "Testimonios", href: isHomePage ? "#testimonios" : "/#testimonios" },
   ];
+
+  const handleNavClick = (href: string) => {
+    setIsMobileMenuOpen(false);
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[80] transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-[80] transition-all duration-400 ${
         shouldBeSolid
-          ? "bg-white/80 backdrop-blur-md py-4 shadow-sm"
-          : "bg-transparent py-6"
+          ? "bg-white/95 backdrop-blur-md shadow-[0_1px_0_0_rgba(180,160,120,0.15)] py-3"
+          : "bg-transparent py-5"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-3">
-          <div
-            className={`relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300 ${!shouldBeSolid ? "bg-white/70 rounded-full p-2.5 shadow-sm" : ""}`}
-          >
+      <div className="container mx-auto px-5 lg:px-8 flex items-center justify-between gap-4">
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
+          <div className={`relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl overflow-hidden transition-all ${
+            !shouldBeSolid ? "bg-white/20 backdrop-blur-sm p-1.5" : ""
+          }`}>
             <img
               src="/images/logo-balam.png"
-              alt="Balam RE Tours Logo"
+              alt="Balam RE Tours"
               className="w-full h-full object-contain"
               onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = "none";
-                if (target.parentElement) {
-                  target.parentElement.innerHTML = `
-                    <div class="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 3L2 21h20L12 3z"/>
-                        <path d="M12 3v18"/>
-                        <path d="M5 15h14"/>
-                      </svg>
-                    </div>
-                  `;
+                const t = e.target as HTMLImageElement;
+                t.style.display = "none";
+                if (t.parentElement) {
+                  t.parentElement.innerHTML = `<div class="w-full h-full bg-cenote-600 rounded-xl flex items-center justify-center text-white font-black text-sm">BR</div>`;
                 }
               }}
             />
           </div>
-          <span
-            className={`text-2xl font-black tracking-tighter ${shouldBeSolid ? "text-slate-900" : "text-white"}`}
-          >
-            BALAM<span className="text-teal-500">RE</span>
-          </span>
-        </a>
+          <div className="flex flex-col leading-none">
+            <span className={`text-xl font-black tracking-tight transition-colors ${shouldBeSolid ? "text-noche-950" : "text-white"}`}>
+              BALAM<span className="text-cenote-600">RE</span>
+            </span>
+            <span className={`text-[10px] font-semibold tracking-widest uppercase transition-colors ${shouldBeSolid ? "text-noche-400" : "text-white/60"}`}>
+              Riviera Maya
+            </span>
+          </div>
+        </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-6">
+        {/* Desktop nav */}
+        <div className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className={`text-sm font-semibold transition-colors ${
+              onClick={(e) => {
+                if (link.href.startsWith("#")) {
+                  e.preventDefault();
+                  handleNavClick(link.href);
+                }
+              }}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
                 shouldBeSolid
-                  ? "text-slate-600 hover:text-teal-600"
-                  : "text-white/80 hover:text-white"
+                  ? "text-noche-600 hover:text-cenote-700 hover:bg-cenote-50"
+                  : "text-white/85 hover:text-white hover:bg-white/10"
               }`}
             >
               {link.name}
             </a>
           ))}
-          <div className="flex items-center gap-3 ml-4">
-            <Button
-              size="sm"
-              className="text-white"
-              onClick={() =>
-                document
-                  .getElementById("tours")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              Reservar Ahora
-            </Button>
-          </div>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Desktop CTAs */}
+        <div className="hidden lg:flex items-center shrink-0">
+          <button
+            onClick={() => navigate("/tours")}
+            className="btn-reserva text-sm px-5 py-2.5"
+          >
+            Reservar Ahora
+          </button>
+        </div>
+
+        {/* Mobile toggle */}
         <button
-          className="md:hidden p-2 rounded-lg"
+          className={`lg:hidden p-2 rounded-xl transition-colors ${shouldBeSolid ? "text-noche-800 hover:bg-caliza-100" : "text-white hover:bg-white/10"}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Abrir menú"
         >
-          {isMobileMenuOpen ? (
-            <X className={shouldBeSolid ? "text-slate-900" : "text-white"} />
-          ) : (
-            <Menu className={shouldBeSolid ? "text-slate-900" : "text-white"} />
-          )}
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-full left-0 right-0 bg-white shadow-2xl p-6 flex flex-col gap-4 md:hidden"
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-lg font-semibold text-slate-900 border-b border-slate-100 pb-2"
-            >
-              {link.name}
-            </a>
-          ))}
-          <Button
-            className="w-full mt-2 text-white"
-            onClick={() => setIsMobileMenuOpen(false)}
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18 }}
+            className="absolute top-full left-0 right-0 bg-white shadow-xl border-t border-caliza-200 p-5 flex flex-col gap-2 lg:hidden"
           >
-            Reservar Ahora
-          </Button>
-        </motion.div>
-      )}
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  if (link.href.startsWith("#")) { e.preventDefault(); }
+                  handleNavClick(link.href);
+                }}
+                className="flex items-center px-4 py-3 rounded-xl text-base font-semibold text-noche-700 hover:bg-cenote-50 hover:text-cenote-700 transition-colors"
+              >
+                {link.name}
+              </a>
+            ))}
+            <div className="pt-3 flex flex-col gap-2 border-t border-caliza-200 mt-1">
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); navigate("/tours"); }}
+                className="btn-reserva justify-center"
+              >
+                Ver Todos los Tours
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

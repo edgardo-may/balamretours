@@ -5,70 +5,81 @@ import { testimonials } from '../../data/tours';
 
 const Testimonials: React.FC = () => {
   return (
-    <section id="testimonios" className="py-24 bg-slate-950 overflow-hidden relative">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px]" />
+    <section id="testimonios" className="py-24 bg-noche-950 overflow-hidden relative">
+      {/* Ambient glows */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/3 left-1/4 w-[500px] h-[300px] bg-cenote-700/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[300px] bg-tierra-700/8 rounded-full blur-[100px]" />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-sm font-bold text-teal-400 uppercase tracking-widest mb-3">Testimonios</h2>
-          <h3 className="text-4xl md:text-5xl font-black text-white leading-tight">
-            Lo que dicen nuestros viajeros
-          </h3>
+      <div className="container mx-auto px-5 lg:px-8 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="section-eyebrow text-cenote-400 mb-3 block">Testimonios</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight">
+            Lo que dicen nuestros{" "}
+            <span className="text-cenote-300">viajeros</span>
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Cards grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.id}
-              initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-[2rem] flex flex-col h-full relative group"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.12, duration: 0.6 }}
+              className="relative flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-7 hover:bg-white/8 hover:border-cenote-400/20 transition-all duration-300"
             >
-              <Quote className="absolute top-6 right-8 w-12 h-12 text-white/10 group-hover:text-teal-400/20 transition-colors" />
-              
-              <div className="flex gap-1 mb-6">
+              {/* Quote decoration */}
+              <Quote className="absolute top-5 right-6 w-10 h-10 text-white/6" />
+
+              {/* Stars */}
+              <div className="flex gap-1 mb-5">
                 {[...Array(testimonial.stars)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
 
-              <p className="text-white/80 text-lg italic mb-8 flex-grow">
+              {/* Text */}
+              <p className="text-white/75 text-base leading-relaxed mb-7 flex-grow italic">
                 "{testimonial.text}"
               </p>
 
-              <div className="flex items-center gap-4 mt-auto">
-                <img 
-                  src={testimonial.image} 
-                  alt={testimonial.name} 
-                  className="w-14 h-14 rounded-full object-cover border-2 border-teal-500/30"
+              {/* Author */}
+              <div className="flex items-center gap-3.5 mt-auto">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-12 h-12 rounded-full object-cover border-2 border-cenote-500/30"
                 />
                 <div>
-                  <h4 className="text-white font-bold">{testimonial.name}</h4>
-                  <p className="text-teal-400 text-sm font-medium">{testimonial.role}</p>
+                  <h4 className="text-white font-bold text-sm">{testimonial.name}</h4>
+                  <p className="text-cenote-400 text-xs font-medium">{testimonial.role}</p>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+        {/* Trust logos */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-20 text-center"
+          className="mt-16 text-center"
         >
-          <p className="text-white/60 font-medium mb-6">Más de 500 reseñas de 5 estrellas en plataformas globales</p>
-          <div className="flex justify-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
-            {/* Simple representation of review site logos */}
-            <span className="text-white text-xl font-black">TripAdvisor</span>
-            <span className="text-white text-xl font-black">Google</span>
-            <span className="text-white text-xl font-black">Viator</span>
+          <p className="text-noche-400 text-sm font-medium mb-6">
+            Más de <span className="text-cenote-400 font-bold">500 reseñas de 5 estrellas</span> en plataformas globales
+          </p>
+          <div className="flex justify-center items-center gap-10 opacity-35 hover:opacity-60 transition-opacity">
+            {["TripAdvisor", "Google", "Viator", "Booking"].map((platform) => (
+              <span key={platform} className="text-white text-base font-black tracking-tight">
+                {platform}
+              </span>
+            ))}
           </div>
         </motion.div>
       </div>

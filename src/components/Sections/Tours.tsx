@@ -10,6 +10,7 @@ import {
   Tag,
   ArrowRight,
   Percent,
+  Users,
 } from "lucide-react";
 import { useGeneralTours, usePrivateTours, useOfferTours } from "../../hooks/useTours";
 import { getPublicImageUrl } from "../../lib/supabase";
@@ -20,402 +21,365 @@ import type { TourWithDetails } from "../../types/tour";
 interface TourCardProps {
   tour: TourWithDetails;
   index: number;
-  badge?: { label: string; color: string };
+  variant?: "light" | "dark";
+  badge?: { label: string; variant: "colectivo" | "privado" | "oferta" };
 }
 
-const TourCard: FC<TourCardProps> = ({ tour, index, badge }) => {
-  const prices = Array.isArray(tour.prices)
-    ? tour.prices
-    : tour.prices
-    ? [tour.prices]
-    : [];
-  const minPrice =
-    prices.length > 0
-      ? Math.min(...prices.map((p) => p.precio_adulto || 0))
-      : 0;
-  const images = Array.isArray(tour.images)
-    ? tour.images
-    : tour.images
-    ? [tour.images]
-    : [];
+const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge }) => {
+  const prices = Array.isArray(tour.prices) ? tour.prices : tour.prices ? [tour.prices] : [];
+  const minPrice = prices.length > 0 ? Math.min(...prices.map((p) => p.precio_adulto || 0)) : 0;
+  const images = Array.isArray(tour.images) ? tour.images : tour.images ? [tour.images] : [];
   const mainImage =
-    getPublicImageUrl(
-      images.find((img) => img.is_main)?.url || images[0]?.url,
-      "tour_images"
-    ) || "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800";
+    getPublicImageUrl(images.find((img) => img.is_main)?.url || images[0]?.url, "tour_images") ||
+    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800";
+
+  const isDark = variant === "dark";
+
+  const badgeColors = {
+    colectivo: "bg-cenote-50 text-cenote-700 border border-cenote-200",
+    privado: "bg-tierra-100 text-tierra-800 border border-tierra-200",
+    oferta: "bg-rose-50 text-rose-700 border border-rose-200",
+  };
 
   return (
     <motion.div
-      key={tour.id}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.08 }}
-      className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col h-full"
+      transition={{ delay: index * 0.07, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className={`group relative flex flex-col rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ${
+        isDark
+          ? "bg-noche-900 border border-noche-800 hover:border-tierra-400/30"
+          : "bg-white border border-caliza-200"
+      }`}
+      style={{ boxShadow: isDark ? "0 2px 20px rgba(0,0,0,0.3)" : "0 2px 20px rgba(14,75,88,0.07)" }}
     >
-      <div className="relative h-64 overflow-hidden">
+      {/* Image */}
+      <div className="relative h-56 overflow-hidden">
         <img
           src={mainImage}
           alt={tour.nombre}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
+        <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-noche-900/70" : "from-black/30"} to-transparent`} />
 
-        {/* Category badge */}
-        <div className="absolute top-5 left-5 flex gap-2">
-          <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-wider text-slate-900 shadow-sm">
-            {tour.categoria}
-          </span>
+        {/* Top badges */}
+        <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
           {badge && (
-            <span
-              className={`px-3 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-wider shadow-sm ${badge.color}`}
-            >
+            <span className={`tour-badge ${badgeColors[badge.variant]}`}>
+              {badge.variant === "privado" && <Lock className="w-3 h-3" />}
+              {badge.variant === "colectivo" && <Users className="w-3 h-3" />}
               {badge.label}
             </span>
           )}
+          <span className={`tour-badge ${isDark ? "bg-noche-800/90 text-caliza-300 border border-noche-700" : "bg-white/90 text-noche-700 border border-caliza-200 backdrop-blur-sm"}`}>
+            {tour.categoria}
+          </span>
         </div>
 
         {/* Rating */}
-        <div className="absolute bottom-4 right-4">
-          <div className="bg-teal-600/90 backdrop-blur-md px-3 py-1.5 rounded-2xl flex items-center gap-1 shadow-lg">
-            <Star className="w-3.5 h-3.5 fill-white text-white" />
-            <span className="text-white text-xs font-black">5.0</span>
+        <div className="absolute top-4 right-4">
+          <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full ${isDark ? "bg-noche-800/90" : "bg-white/90 backdrop-blur-sm"}`}>
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+            <span className={`text-xs font-bold ${isDark ? "text-white" : "text-noche-800"}`}>5.0</span>
           </div>
         </div>
       </div>
 
-      <div className="p-7 flex flex-col flex-grow">
-        <div className="flex items-center gap-1.5 text-slate-400 mb-1.5">
-          <MapPin className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-bold uppercase tracking-widest">
+      {/* Body */}
+      <div className="p-5 flex flex-col flex-grow">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <MapPin className={`w-3.5 h-3.5 ${isDark ? "text-cenote-400" : "text-cenote-600"}`} />
+          <span className={`text-2xs font-bold uppercase tracking-widest ${isDark ? "text-noche-400" : "text-noche-400"}`}>
             {tour.ubicacion || "Riviera Maya"}
           </span>
         </div>
-        <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-teal-600 transition-colors line-clamp-1">
+        <h3 className={`text-lg font-bold mb-2 line-clamp-1 transition-colors ${
+          isDark
+            ? "text-white group-hover:text-tierra-300"
+            : "text-noche-900 group-hover:text-cenote-700"
+        }`}>
           {tour.nombre}
         </h3>
-        <p className="text-slate-500 text-sm line-clamp-2 mb-6 leading-relaxed">
+        <p className={`text-sm line-clamp-2 mb-4 leading-relaxed ${isDark ? "text-noche-400" : "text-noche-500"}`}>
           {tour.descripcion}
         </p>
 
-        <div className="mt-auto pt-5 border-t border-slate-50 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-slate-600">
-              <Clock className="w-4 h-4 text-teal-600" />
-              <span className="text-xs font-bold">
-                {tour.duracion} {tour.duracion_tipo}
-              </span>
+        {/* Footer */}
+        <div className={`mt-auto pt-4 border-t flex items-end justify-between ${isDark ? "border-noche-800" : "border-caliza-100"}`}>
+          <div className="flex flex-col gap-1.5">
+            <div className={`flex items-center gap-1.5 text-xs font-medium ${isDark ? "text-noche-400" : "text-noche-500"}`}>
+              <Clock className={`w-3.5 h-3.5 ${isDark ? "text-tierra-400" : "text-cenote-600"}`} />
+              {tour.duracion} {tour.duracion_tipo}
             </div>
           </div>
           <div className="text-right">
-            <span className="text-[10px] font-black text-slate-400 uppercase block mb-0.5">
+            <span className={`block text-2xs font-bold uppercase tracking-widest mb-0.5 ${isDark ? "text-noche-500" : "text-noche-400"}`}>
               Desde
             </span>
-            <span className="text-2xl font-black text-slate-900">
+            <span className={`text-2xl font-extrabold ${isDark ? "text-white" : "text-noche-900"}`}>
               ${minPrice}
             </span>
           </div>
         </div>
-      </div>
 
-      {/* Overlay link */}
-      <Link to={`/tours/${tour.id}`} className="absolute inset-0 z-10" aria-label={`Ver tour: ${tour.nombre}`} />
+        {/* Action button */}
+        <div className="mt-4">
+          <Link
+            to={`/tours/${tour.id}`}
+            className={`flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-xs font-bold transition-all ${
+              isDark
+                ? "bg-tierra-500 text-white hover:bg-tierra-600"
+                : "bg-cenote-600 text-white hover:bg-cenote-700"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            Ver Detalles
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      </div>
     </motion.div>
   );
 };
 
-// ─── Skeleton de carga ────────────────────────────────────────────────────────
-const TourSkeleton: FC = () => (
-  <div className="animate-pulse bg-slate-50 rounded-[2.5rem] h-[440px] border border-slate-100" />
+// ─── Skeleton ──────────────────────────────────────────────────────────────────
+const TourSkeleton: FC<{ dark?: boolean }> = ({ dark }) => (
+  <div className={`animate-pulse rounded-3xl h-[440px] ${dark ? "bg-noche-800" : "bg-caliza-100"}`} />
 );
 
-// ─── Section Header ───────────────────────────────────────────────────────────
+// ─── Section Header ────────────────────────────────────────────────────────────
 interface SectionHeaderProps {
   eyebrow: string;
   title: string;
   highlight: string;
   description: string;
   icon: React.ReactNode;
-  linkTo: string;
-  linkLabel: string;
+  linkTo?: string;
+  linkLabel?: string;
+  linkHref?: string;
+  dark?: boolean;
 }
 
 const SectionHeader: FC<SectionHeaderProps> = ({
-  eyebrow,
-  title,
-  highlight,
-  description,
-  icon,
-  linkTo,
-  linkLabel,
+  eyebrow, title, highlight, description, icon, linkTo, linkLabel, linkHref, dark,
 }) => (
-  <div className="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
     <div className="max-w-2xl">
       <motion.div
-        initial={{ opacity: 0, x: -20 }}
+        initial={{ opacity: 0, x: -16 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="flex items-center gap-2 mb-4"
+        className="flex items-center gap-2 mb-3"
       >
         {icon}
-        <span className="text-teal-600 font-black uppercase tracking-[0.2em] text-xs">
+        <span className={`text-2xs font-bold uppercase tracking-brand ${dark ? "text-cenote-400" : "text-cenote-600"}`}>
           {eyebrow}
         </span>
       </motion.div>
       <motion.h2
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.1 }}
-        className="text-4xl md:text-5xl font-black text-slate-900 leading-tight"
+        transition={{ delay: 0.08 }}
+        className={`text-4xl md:text-5xl font-extrabold leading-tight mb-3 ${dark ? "text-white" : "text-noche-900"}`}
       >
         {title}{" "}
-        <span className="text-teal-600">{highlight}</span>
+        <span className={dark ? "text-tierra-300" : "text-cenote-600"}>{highlight}</span>
       </motion.h2>
       <motion.p
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
-        className="text-slate-500 mt-3 leading-relaxed"
+        transition={{ delay: 0.16 }}
+        className={`leading-relaxed ${dark ? "text-noche-400" : "text-noche-500"}`}
       >
         {description}
       </motion.p>
     </div>
-    <Link
-      to={linkTo}
-      className="group flex items-center gap-3 bg-slate-50 hover:bg-teal-600 hover:text-white px-8 py-4 rounded-2xl transition-all duration-300 font-black uppercase tracking-widest text-xs shrink-0"
-    >
-      {linkLabel}
-      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-    </Link>
+    {(linkTo || linkHref) && linkLabel && (
+      linkHref ? (
+        <a
+          href={linkHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`shrink-0 group flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all ${
+            dark
+              ? "bg-tierra-500 text-white hover:bg-tierra-400"
+              : "bg-cenote-50 text-cenote-700 border border-cenote-100 hover:bg-cenote-600 hover:text-white hover:border-cenote-600"
+          }`}
+        >
+          {linkLabel}
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+        </a>
+      ) : (
+        <Link
+          to={linkTo!}
+          className={`shrink-0 group flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all ${
+            dark
+              ? "bg-tierra-500 text-white hover:bg-tierra-400"
+              : "bg-cenote-50 text-cenote-700 border border-cenote-100 hover:bg-cenote-600 hover:text-white hover:border-cenote-600"
+          }`}
+        >
+          {linkLabel}
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+        </Link>
+      )
+    )}
   </div>
 );
 
-// ─── Sección Tours Generales ──────────────────────────────────────────────────
+// ─── Sección Tours Generales ───────────────────────────────────────────────────
 const GeneralToursSection: FC = () => {
   const { tours, loading } = useGeneralTours();
 
   return (
-    <section id="tours-generales" className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section id="tours-generales" className="py-20 bg-caliza-50 overflow-hidden">
+      {/* Decorative top border */}
+      <div className="h-1 bg-gradient-to-r from-transparent via-cenote-400/40 to-transparent mb-0" />
+      <div className="container mx-auto px-5 lg:px-8 pt-20">
         <SectionHeader
           eyebrow="Experiencias Compartidas"
           title="Tours"
-          highlight="Generales"
-          description="Explora los destinos más icónicos de la Riviera Maya junto a otros viajeros. Tours grupales con guías expertos."
-          icon={<Sparkles className="w-5 h-5 text-teal-600" />}
-          linkTo="/tours"
-          linkLabel="Ver todos"
+          highlight="Colectivos"
+          description="Vive los destinos más icónicos de la Riviera Maya junto a otros viajeros. Grupos pequeños, guías expertos, precios accesibles."
+          icon={<Sparkles className="w-4 h-4 text-cenote-600" />}
+          linkTo="/tours?tipo=colectivo"
+          linkLabel="Ver todos los tours"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
             ? [1, 2, 3].map((i) => <TourSkeleton key={i} />)
             : tours.length > 0
-            ? tours.map((tour, index) => (
+            ? tours.slice(0, 6).map((tour, index) => (
                 <TourCard
                   key={tour.id}
                   tour={tour}
                   index={index}
-                  badge={{ label: "Grupal", color: "bg-teal-600/90 text-white backdrop-blur-md" }}
+                  badge={{ label: "Grupal", variant: "colectivo" }}
                 />
               ))
             : (
-              <div className="col-span-full text-center py-16 text-slate-400">
+              <div className="col-span-full text-center py-16 text-noche-400">
                 <Sparkles className="w-10 h-10 mx-auto mb-3 opacity-30" />
                 <p className="font-semibold">No hay tours generales disponibles por el momento.</p>
               </div>
             )}
         </div>
+
+        {!loading && tours.length > 6 && (
+          <div className="text-center mt-10">
+            <Link to="/tours" className="btn-reserva inline-flex">
+              Ver todos los tours <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
 };
 
-// ─── Sección Tours Privados ───────────────────────────────────────────────────
+// ─── Sección Tours Privados ────────────────────────────────────────────────────
 const PrivateToursSection: FC = () => {
   const { tours, loading } = usePrivateTours();
-  const whatsappUrl = `https://wa.me/529983471258?text=${encodeURIComponent("Hola, me interesa reservar un tour privado")}`;
 
   return (
-    <section id="tours-privados" className="py-24 bg-slate-950 overflow-hidden relative">
-      {/* Decorative gradient */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-teal-600/10 rounded-full blur-3xl" />
+    <section id="tours-privados" className="py-20 bg-noche-950 overflow-hidden relative">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-tierra-500/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-cenote-600/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-6 relative">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
-          <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-2 mb-4"
-            >
-              <Lock className="w-5 h-5 text-amber-400" />
-              <span className="text-amber-400 font-black uppercase tracking-[0.2em] text-xs">
-                Exclusividad Total
-              </span>
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-black text-white leading-tight"
-            >
-              Tours{" "}
-              <span className="text-amber-400">Privados</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-slate-400 mt-3 leading-relaxed"
-            >
-              Experiencias diseñadas exclusivamente para ti y tus acompañantes. Horarios flexibles, atención personalizada y acceso a destinos únicos.
-            </motion.p>
-          </div>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-3 bg-amber-400 hover:bg-amber-300 text-slate-900 px-8 py-4 rounded-2xl transition-all duration-300 font-black uppercase tracking-widest text-xs shrink-0"
-          >
-            Cotizar Privado
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
+      <div className="container mx-auto px-5 lg:px-8 relative">
+        <SectionHeader
+          eyebrow="Exclusividad Total"
+          title="Tours"
+          highlight="Privados"
+          description="Diseñados exclusivamente para ti y tus acompañantes. Horarios flexibles, rutas personalizadas y atención de primer nivel."
+          icon={<Lock className="w-4 h-4 text-tierra-400" />}
+          linkTo="/tours?tipo=privado"
+          linkLabel="Explorar Privados"
+          dark
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
-            ? [1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse bg-slate-800 rounded-[2.5rem] h-[440px]" />
-              ))
+            ? [1, 2, 3].map((i) => <TourSkeleton key={i} dark />)
             : tours.length > 0
-            ? tours.map((tour, index) => (
-                <motion.div
+            ? tours.slice(0, 6).map((tour, index) => (
+                <TourCard
                   key={tour.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
-                  className="group relative bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-800 hover:border-amber-400/30 transition-all duration-500 flex flex-col h-full hover:shadow-2xl hover:shadow-amber-400/5"
-                >
-                  {/* Image */}
-                  {(() => {
-                    const images = Array.isArray(tour.images) ? tour.images : tour.images ? [tour.images] : [];
-                    const mainImage = getPublicImageUrl(images.find((img) => img.is_main)?.url || images[0]?.url, "tour_images") ||
-                      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800";
-                    const prices = Array.isArray(tour.prices) ? tour.prices : tour.prices ? [tour.prices] : [];
-                    const minPrice = prices.length > 0 ? Math.min(...prices.map((p) => p.precio_adulto || 0)) : 0;
-
-                    return (
-                      <>
-                        <div className="relative h-64 overflow-hidden">
-                          <img
-                            src={mainImage}
-                            alt={tour.nombre}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
-                          <div className="absolute top-5 left-5 flex gap-2">
-                            <span className="bg-amber-400 text-slate-900 px-3 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1">
-                              <Lock className="w-3 h-3" /> Privado
-                            </span>
-                          </div>
-                          <div className="absolute bottom-4 right-4">
-                            <div className="bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-2xl flex items-center gap-1">
-                              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                              <span className="text-white text-xs font-black">5.0</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-7 flex flex-col flex-grow">
-                          <div className="flex items-center gap-1.5 text-slate-500 mb-1.5">
-                            <MapPin className="w-3.5 h-3.5" />
-                            <span className="text-[10px] font-bold uppercase tracking-widest">
-                              {tour.ubicacion || "Riviera Maya"}
-                            </span>
-                          </div>
-                          <h3 className="text-xl font-black text-white mb-2 group-hover:text-amber-400 transition-colors line-clamp-1">
-                            {tour.nombre}
-                          </h3>
-                          <p className="text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed">
-                            {tour.descripcion}
-                          </p>
-
-                          <div className="mt-auto pt-5 border-t border-slate-800 flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 text-slate-400">
-                              <Clock className="w-4 h-4 text-amber-400" />
-                              <span className="text-xs font-bold">
-                                {tour.duracion} {tour.duracion_tipo}
-                              </span>
-                            </div>
-                            <div className="text-right">
-                              <span className="text-[10px] font-black text-slate-500 uppercase block mb-0.5">
-                                Desde
-                              </span>
-                              <span className="text-2xl font-black text-white">${minPrice}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })()}
-
-                  <Link to={`/tours/${tour.id}`} className="absolute inset-0 z-10" aria-label={`Ver tour privado: ${tour.nombre}`} />
-                </motion.div>
+                  tour={tour}
+                  index={index}
+                  variant="dark"
+                  badge={{ label: "Privado", variant: "privado" }}
+                />
               ))
             : (
-              <div className="col-span-full text-center py-16 text-slate-500">
+              <div className="col-span-full text-center py-16 text-noche-500">
                 <Lock className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                <p className="font-semibold">No hay tours privados disponibles por el momento.</p>
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-amber-400 font-bold text-sm hover:text-amber-300 transition-colors"
+                <p className="font-semibold mb-4">No hay tours privados disponibles por el momento.</p>
+                <Link
+                  to="/tours"
+                  className="btn-reserva-tierra inline-flex"
                 >
-                  Contactar para cotización personalizada <ArrowRight className="w-4 h-4" />
-                </a>
+                  Ver Catálogo General <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             )}
         </div>
+
+        {/* Private CTA banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-14 bg-gradient-to-r from-tierra-900/60 via-noche-900 to-noche-900 border border-tierra-800/40 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6"
+        >
+          <div>
+            <h3 className="text-2xl font-extrabold text-white mb-2">¿Quieres una experiencia 100% tuya?</h3>
+            <p className="text-noche-400 max-w-xl">
+              Diseñamos tu tour privado desde cero. Destinos, horarios, transporte y experiencias a tu medida. Sin grupos, sin prisa.
+            </p>
+          </div>
+          <Link
+            to="/tours?tipo=privado"
+            className="shrink-0 btn-reserva-tierra px-8 py-4 text-base"
+          >
+            Ver Catálogo Privado
+            <ArrowRight className="w-5 h-5 ml-1 inline-block" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-// ─── Sección Ofertas ──────────────────────────────────────────────────────────
+// ─── Sección Ofertas ───────────────────────────────────────────────────────────
 const OffersSection: FC = () => {
   const { tours, loading } = useOfferTours();
 
   if (!loading && tours.length === 0) return null;
 
   return (
-    <section id="ofertas" className="py-24 bg-gradient-to-br from-rose-50 via-white to-orange-50 overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section id="ofertas" className="py-20 bg-white overflow-hidden">
+      <div className="container mx-auto px-5 lg:px-8">
         <SectionHeader
           eyebrow="Tiempo Limitado"
           title="Ofertas"
           highlight="Especiales"
-          description="Aprovecha nuestros precios especiales en tours seleccionados. Las ofertas son por tiempo limitado."
-          icon={<Percent className="w-5 h-5 text-rose-500" />}
+          description="Precios reducidos en tours seleccionados. Aprovecha antes de que se agoten los lugares."
+          icon={<Percent className="w-4 h-4 text-rose-500" />}
           linkTo="/tours"
           linkLabel="Ver todas"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
-            ? [1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse bg-white rounded-[2.5rem] h-[440px] border border-rose-100" />
-              ))
+            ? [1, 2, 3].map((i) => <TourSkeleton key={i} />)
             : tours.map((tour, index) => {
                 const prices = Array.isArray(tour.prices) ? tour.prices : tour.prices ? [tour.prices] : [];
                 const originalPrice = prices.length > 0 ? Math.min(...prices.map((p) => p.precio_adulto || 0)) : 0;
@@ -428,66 +392,66 @@ const OffersSection: FC = () => {
                 return (
                   <motion.div
                     key={tour.id}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.08 }}
-                    className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-rose-100 flex flex-col h-full"
+                    transition={{ delay: index * 0.07 }}
+                    className="group relative bg-white rounded-3xl overflow-hidden border border-caliza-200 flex flex-col hover:-translate-y-1 transition-all duration-300"
+                    style={{ boxShadow: "0 2px 20px rgba(14,75,88,0.07)" }}
                   >
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative h-56 overflow-hidden">
                       <img
                         src={mainImage}
                         alt={tour.nombre}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                       />
-                      {/* Discount badge */}
-                      <div className="absolute top-5 left-5">
-                        <span className="bg-rose-500 text-white px-3 py-1.5 rounded-2xl text-sm font-black shadow-lg flex items-center gap-1">
-                          <Tag className="w-3.5 h-3.5" /> -{discount}%
+                      <div className="absolute top-4 left-4">
+                        <span className="flex items-center gap-1.5 bg-rose-500 text-white px-3 py-1.5 rounded-full text-2xs font-bold shadow-lg">
+                          <Tag className="w-3 h-3" /> -{discount}%
                         </span>
                       </div>
-                      <div className="absolute bottom-4 right-4">
-                        <div className="bg-rose-500/90 backdrop-blur-md px-3 py-1.5 rounded-2xl flex items-center gap-1">
-                          <Star className="w-3.5 h-3.5 fill-white text-white" />
-                          <span className="text-white text-xs font-black">5.0</span>
+                      <div className="absolute top-4 right-4">
+                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm">
+                          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-bold text-noche-800">5.0</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="p-7 flex flex-col flex-grow">
-                      <div className="flex items-center gap-1.5 text-slate-400 mb-1.5">
-                        <MapPin className="w-3.5 h-3.5" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest">
+                    <div className="p-5 flex flex-col flex-grow">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-cenote-600" />
+                        <span className="text-2xs font-bold uppercase tracking-widest text-noche-400">
                           {tour.ubicacion || "Riviera Maya"}
                         </span>
                       </div>
-                      <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-rose-500 transition-colors line-clamp-1">
+                      <h3 className="text-lg font-bold text-noche-900 mb-2 line-clamp-1 group-hover:text-rose-600 transition-colors">
                         {tour.nombre}
                       </h3>
-                      <p className="text-slate-500 text-sm line-clamp-2 mb-6 leading-relaxed">
-                        {tour.descripcion}
-                      </p>
+                      <p className="text-sm text-noche-500 line-clamp-2 mb-4 leading-relaxed">{tour.descripcion}</p>
 
-                      <div className="mt-auto pt-5 border-t border-rose-50 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-slate-600">
-                          <Clock className="w-4 h-4 text-rose-500" />
-                          <span className="text-xs font-bold">
-                            {tour.duracion} {tour.duracion_tipo}
-                          </span>
+                      <div className="mt-auto pt-4 border-t border-caliza-100 flex items-end justify-between">
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-noche-500">
+                          <Clock className="w-3.5 h-3.5 text-rose-500" />
+                          {tour.duracion} {tour.duracion_tipo}
                         </div>
                         <div className="text-right">
-                          <span className="text-[10px] font-black text-slate-400 line-through block">
-                            ${originalPrice}
-                          </span>
-                          <span className="text-2xl font-black text-rose-500">
-                            ${salePrice}
-                          </span>
+                          <span className="text-xs text-noche-400 line-through block">${originalPrice}</span>
+                          <span className="text-2xl font-extrabold text-rose-600">${salePrice}</span>
                         </div>
                       </div>
-                    </div>
 
-                    <Link to={`/tours/${tour.id}`} className="absolute inset-0 z-10" aria-label={`Ver oferta: ${tour.nombre}`} />
+                      {/* Action button */}
+                      <div className="mt-4">
+                        <Link
+                          to={`/tours/${tour.id}`}
+                          className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-xs font-bold bg-rose-500 text-white hover:bg-rose-600 transition-all"
+                        >
+                          Ver Detalles <ChevronRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
                   </motion.div>
                 );
               })}
@@ -497,7 +461,7 @@ const OffersSection: FC = () => {
   );
 };
 
-// ─── Componente principal que exporta las 3 secciones ────────────────────────
+// ─── Exportación principal ─────────────────────────────────────────────────────
 const Tours: FC = () => (
   <>
     <GeneralToursSection />
