@@ -1,70 +1,240 @@
+/* ── Google Fonts ─────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
+  :root {
+    /* Tokens del mundo maya */
+    --cenote:       #0e8a9e;
+    --cenote-light: #edfcfd;
+    --cenote-dark:  #0a2f38;
+    --tierra:       #e28a20;
+    --tierra-light: #fdf8ed;
+    --tierra-dark:  #401808;
+    --caliza:       #f9f6ef;
+    --caliza-mid:   #e4d8c4;
+    --selva:        #1a8257;
+    --noche:        #111827;
+
+    /* Tipografía */
+    --ink-primary:   #111827;
+    --ink-secondary: #374151;
+    --ink-tertiary:  #6b7280;
+    --ink-muted:     #9ca3af;
+
+    /* Superficies */
+    --surface-base:    #ffffff;
+    --surface-warm:    #fdfcf9;
+    --surface-sand:    #f9f6ef;
+    --surface-beach:   #f0eadc;
+
+    /* Bordes */
+    --border-soft:   rgba(180, 160, 120, 0.15);
+    --border-medium: rgba(180, 160, 120, 0.28);
+    --border-strong: rgba(14, 138, 158, 0.25);
+  }
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    @apply text-slate-900 antialiased overflow-x-hidden;
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    @apply antialiased overflow-x-hidden;
+    background-color: var(--surface-warm);
+    color: var(--ink-primary);
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 800;
   }
 }
 
-/* Custom Utilities for Premium Look */
-.glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20;
+@layer components {
+
+  /* ── Botón CTA principal ─────────────────────────────────────────────── */
+  .btn-reserva {
+    @apply inline-flex items-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm tracking-wide;
+    @apply bg-cenote-600 text-white;
+    @apply shadow-cta;
+    @apply transition-all duration-200;
+    @apply hover:bg-cenote-700 hover:-translate-y-0.5 hover:shadow-[0_12px_36px_0_rgba(14,138,158,0.42)];
+    @apply active:translate-y-0;
+  }
+
+  .btn-reserva-tierra {
+    @apply inline-flex items-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm tracking-wide;
+    @apply bg-tierra-500 text-white;
+    @apply shadow-[0_8px_30px_0_rgba(226,138,32,0.30)];
+    @apply transition-all duration-200;
+    @apply hover:bg-tierra-600 hover:-translate-y-0.5;
+    @apply active:translate-y-0;
+  }
+
+  .btn-whatsapp {
+    @apply inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm;
+    @apply bg-[#25D366] text-white;
+    @apply shadow-whatsapp;
+    @apply transition-all duration-200;
+    @apply hover:bg-[#1fba59] hover:-translate-y-0.5;
+  }
+
+  .btn-ghost-white {
+    @apply inline-flex items-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm;
+    @apply border-2 border-white/40 text-white;
+    @apply backdrop-blur-sm;
+    @apply transition-all duration-200;
+    @apply hover:bg-white/10 hover:border-white/70;
+  }
+
+  /* ── Card de tour ─────────────────────────────────────────────────────── */
+  .tour-card {
+    @apply bg-white rounded-3xl overflow-hidden flex flex-col;
+    @apply border border-caliza-200;
+    box-shadow: var(--shadow-card, 0 2px 20px rgba(14,75,88,0.07));
+    @apply transition-all duration-300;
+  }
+
+  .tour-card:hover {
+    @apply -translate-y-1;
+    box-shadow: 0 12px 40px 0 rgba(14,75,88,0.14);
+  }
+
+  /* ── Badge de tour ─────────────────────────────────────────────────────── */
+  .tour-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-2xs font-bold uppercase tracking-brand;
+  }
+
+  .tour-badge-colectivo {
+    @apply tour-badge bg-cenote-50 text-cenote-700 border border-cenote-200;
+  }
+
+  .tour-badge-privado {
+    @apply tour-badge bg-tierra-50 text-tierra-700 border border-tierra-200;
+  }
+
+  /* ── Trust badge ─────────────────────────────────────────────────────── */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold;
+    @apply bg-white/90 backdrop-blur-sm text-noche-800;
+    @apply border border-white/60;
+    @apply shadow-sm;
+  }
+
+  /* ── Input turístico ─────────────────────────────────────────────────── */
+  .input-tour {
+    @apply w-full px-4 py-3.5 rounded-xl font-medium text-sm;
+    @apply bg-caliza-50 border border-caliza-200;
+    @apply text-noche-900 placeholder:text-noche-400;
+    @apply transition-all duration-150;
+    @apply focus:outline-none focus:ring-2 focus:ring-cenote-400 focus:border-transparent;
+  }
+
+  /* ── Section heading ─────────────────────────────────────────────────── */
+  .section-eyebrow {
+    @apply text-2xs font-bold uppercase tracking-brand text-cenote-600;
+  }
+
+  /* ── Separador diagonal maya ─────────────────────────────────────────── */
+  .maya-divider {
+    @apply relative overflow-hidden;
+  }
+
+  .maya-divider::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0;
+    height: 60px;
+    background: inherit;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  }
+
 }
 
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500;
-}
-
-/* Custom Scrollbar */
+/* ── Scrollbar premium ───────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
+  background: var(--caliza, #f9f6ef);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full border-4 border-slate-100 hover:bg-slate-400 transition-colors;
+  background: #d2bfa1;
+  border-radius: 99px;
+  border: 2px solid var(--caliza, #f9f6ef);
 }
 
-/* Section Transitions */
-section {
-  @apply relative;
+::-webkit-scrollbar-thumb:hover {
+  background: #bca07d;
 }
-/* Leaflet Customizations */
+
+/* ── Leaflet overrides ───────────────────────────────────────────────── */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  border-radius: 2.5rem;
+  border-radius: 1.5rem;
   z-index: 10;
-  border: 1px solid rgba(15, 118, 110, 0.1);
+  border: 1px solid rgba(14, 138, 158, 0.12);
 }
 
 .leaflet-popup-content-wrapper {
-  @apply !rounded-2xl !shadow-2xl !border-none !p-0 overflow-hidden;
+  border-radius: 1rem !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+  border: none !important;
+  padding: 0 !important;
+  overflow: hidden;
 }
 
 .leaflet-popup-content {
-  @apply !m-0 !w-72;
+  margin: 0 !important;
+  width: 18rem !important;
 }
 
 .leaflet-popup-tip-container {
-  @apply hidden;
+  display: none;
 }
 
 .leaflet-control-zoom {
-  @apply !border-none !shadow-xl !rounded-xl overflow-hidden;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden;
 }
 
-.leaflet-control-zoom-in, .leaflet-control-zoom-out {
-  @apply !bg-white !text-slate-900 !border-none hover:!bg-teal-50 transition-colors;
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background: white !important;
+  color: #111827 !important;
+  border: none !important;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background: #edfcfd !important;
+}
+
+/* ── Animaciones suaves ─────────────────────────────────────────────── */
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+.animate-float-up {
+  animation: floatUp 4s ease-in-out infinite;
+}
+
+/* WhatsApp pulse */
+@keyframes waPulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.wa-pulse {
+  animation: waPulse 2.2s ease-out infinite;
 }
