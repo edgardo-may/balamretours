@@ -11,14 +11,14 @@ import FloatingWhatsApp from '../components/Ui/FloatingWhatsApp';
 
 const Home: FC = () => {
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-teal-100 selection:text-teal-900">
+    <div className="min-h-screen bg-caliza-50 font-sans selection:bg-cenote-100 selection:text-cenote-900">
       <Navbar />
       
       <main>
         <Hero />
         <Tours />
-        <MapSection />
         <Benefits />
+        <MapSection />
         <Testimonials />
         <FinalCTA />
       </main>
