@@ -129,7 +129,7 @@ export function useToursCatalog() {
         case "price_desc": return getMinPrice(b) - getMinPrice(a);
         case "duration": return a.duracion - b.duracion;
         case "popularity":
-        default: return (b.principal ? 1 : 0) - (a.principal ? 1 : 0);
+        default: return (b.mostrar_home ? 1 : 0) - (a.mostrar_home ? 1 : 0);
       }
     });
 

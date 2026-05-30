@@ -11,7 +11,7 @@ const buildTourQuery = () =>
     availability:tour_fechas_disponibilidad(*)
   `);
 
-// ─── Home: tours marcados como principales ────────────────────────────────────
+// ─── Home: tours marcados para mostrarse en Home (mostrar_home = true) ─────────
 export function useHomeTours() {
   const [tours, setTours] = useState<TourWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export function useHomeTours() {
       try {
         setLoading(true);
         const { data, error: supabaseError } = await buildTourQuery()
-          .eq("principal", true)
+          .eq("mostrar_home", true)
           .eq("activo", true)
           .order("created_at", { ascending: false });
 
@@ -40,7 +40,7 @@ export function useHomeTours() {
   return { tours, loading, error };
 }
 
-// ─── Tours Generales (colectivos) activos ─────────────────────────────────────
+// ─── Tours Generales (colectivos) para Home ──────────────────────────────────
 export function useGeneralTours() {
   const [tours, setTours] = useState<TourWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,6 +52,7 @@ export function useGeneralTours() {
         setLoading(true);
         const { data, error: supabaseError } = await buildTourQuery()
           .eq("activo", true)
+          .eq("mostrar_home", true)
           .eq("tipo_tour", "colectivo")
           .order("created_at", { ascending: false })
           .limit(6);
@@ -70,7 +71,7 @@ export function useGeneralTours() {
   return { tours, loading, error };
 }
 
-// ─── Tours Privados activos ───────────────────────────────────────────────────
+// ─── Tours Privados para Home ─────────────────────────────────────────────────
 export function usePrivateTours() {
   const [tours, setTours] = useState<TourWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,6 +83,7 @@ export function usePrivateTours() {
         setLoading(true);
         const { data, error: supabaseError } = await buildTourQuery()
           .eq("activo", true)
+          .eq("mostrar_home", true)
           .eq("tipo_tour", "privado")
           .order("created_at", { ascending: false })
           .limit(6);
@@ -100,7 +102,7 @@ export function usePrivateTours() {
   return { tours, loading, error };
 }
 
-// ─── Ofertas activas ──────────────────────────────────────────────────────────
+// ─── Ofertas activas (con filtro de vigencia por fecha) ───────────────────────
 export function useOfferTours() {
   const [tours, setTours] = useState<TourWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -113,11 +115,21 @@ export function useOfferTours() {
         const { data, error: supabaseError } = await buildTourQuery()
           .eq("activo", true)
           .eq("oferta", true)
-          .order("created_at", { ascending: false })
-          .limit(6);
+          .order("created_at", { ascending: false });
 
         if (supabaseError) throw supabaseError;
-        setTours(data as TourWithDetails[] || []);
+
+        // Filtrar ofertas vigentes según fecha_inicio_oferta y fecha_fin_oferta
+        const now = new Date();
+        const vigentes = ((data as TourWithDetails[]) || []).filter((tour) => {
+          const inicio = tour.fecha_inicio_oferta ? new Date(tour.fecha_inicio_oferta) : null;
+          const fin = tour.fecha_fin_oferta ? new Date(tour.fecha_fin_oferta) : null;
+          const inicioOk = !inicio || now >= inicio;
+          const finOk = !fin || now <= fin;
+          return inicioOk && finOk;
+        });
+
+        setTours(vigentes.slice(0, 6));
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -128,6 +140,38 @@ export function useOfferTours() {
   }, []);
 
   return { tours, loading, error };
+}
+
+// ─── Hook para obtener ofertas de la tabla independiente 'ofertas' ─────────────
+import type { DBOffer } from "../types/tour";
+
+export function useOffers() {
+  const [offers, setOffers] = useState<DBOffer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchOffers() {
+      try {
+        setLoading(true);
+        const { data, error: supabaseError } = await supabase
+          .from("ofertas")
+          .select("*")
+          .eq("activa", true)
+          .order("created_at", { ascending: false });
+
+        if (supabaseError) throw supabaseError;
+        setOffers((data as DBOffer[]) || []);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOffers();
+  }, []);
+
+  return { offers, loading, error };
 }
 
 // ─── Interfaces y tipos ───────────────────────────────────────────────────────
@@ -189,7 +233,7 @@ export function useTours(filters?: TourFilters, sortBy: TourSortOrder = "newest"
         switch (sortBy) {
           case "price_asc": return getMinPrice(a) - getMinPrice(b);
           case "price_desc": return getMinPrice(b) - getMinPrice(a);
-          case "popularity": return (b.principal ? 1 : 0) - (a.principal ? 1 : 0);
+          case "popularity": return (b.mostrar_home ? 1 : 0) - (a.mostrar_home ? 1 : 0);
           case "newest":
           default: return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         }
