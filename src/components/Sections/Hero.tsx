@@ -1,14 +1,7 @@
 import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, ShieldCheck, Users, Zap } from "lucide-react";
-
-const trustBadges = [
-  { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "Guías certificados" },
-  { icon: <Zap className="w-3.5 h-3.5" />, label: "Transporte incluido" },
-  { icon: <Users className="w-3.5 h-3.5" />, label: "Atención personalizada" },
-  { icon: <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />, label: "+500 reseñas 5★" },
-];
+import { ArrowRight, Star } from "lucide-react";
 
 const Hero: FC = () => {
   const navigate = useNavigate();
@@ -40,30 +33,37 @@ const Hero: FC = () => {
               hidden: { opacity: 0 },
               visible: {
                 opacity: 1,
-                transition: { staggerChildren: 0.18, delayChildren: 0.2 },
+                transition: { staggerChildren: 0.15, delayChildren: 0.2 },
               },
             }}
           >
-            {/* Rating row */}
+            {/* Eyebrow */}
             <motion.div
-              variants={{ hidden: { opacity: 0, x: -16 }, visible: { opacity: 1, x: 0 } }}
-              className="flex items-center gap-2.5 mb-7"
+              variants={{
+                hidden: { opacity: 0, y: -10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: "easeOut" },
+                },
+              }}
+              className="flex items-center gap-2 mb-6"
             >
-              <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <Star key={s} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <span className="text-white/90 text-xs font-semibold tracking-widest uppercase">
-                La mejor experiencia en Riviera Maya
+              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+              <span className="text-white/90 text-xs md:text-sm font-semibold tracking-widest uppercase">
+                La mejor experiencia en la Riviera Maya
               </span>
             </motion.div>
 
             {/* Headline */}
             <motion.h1
               variants={{
-                hidden: { opacity: 0, y: 24 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+                hidden: { opacity: 0, y: 30 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.8, ease: "easeOut" },
+                },
               }}
               className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[1.05] tracking-tight mb-6"
             >
@@ -71,53 +71,45 @@ const Hero: FC = () => {
               <span className="relative inline-block">
                 <span className="text-cenote-300">Riviera Maya</span>
                 <span className="absolute -bottom-1 left-0 right-0 h-1 bg-cenote-400/50 rounded-full" />
-              </span>
-              {" "}como nunca.
+              </span>{" "}
+              como nunca.
             </motion.h1>
 
             {/* Subheading */}
             <motion.p
-              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: "easeOut" },
+                },
+              }}
               className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed max-w-xl font-normal"
             >
-              Cenotes cristalinos, ruinas mayas milenarias y selva virgen.
-              Con guías locales certificados que te hacen sentir en casa.
+              Cenotes cristalinos, ruinas mayas milenarias y selva virgen. Con
+              guías locales certificados que te hacen sentir en casa.
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* CTA Button */}
             <motion.div
-              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: "easeOut" },
+                },
+              }}
               className="flex flex-col sm:flex-row gap-4 mb-10"
             >
               <button
                 onClick={() => navigate("/tours")}
-                className="btn-reserva text-base px-8 py-4 group"
+                className="btn-reserva text-base px-10 py-4 group shadow-xl hover:shadow-2xl transition-all"
               >
                 Ver Todos los Tours
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button
-                onClick={() => {
-                  const el = document.getElementById("tours-generales");
-                  el?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="btn-ghost-white text-base px-8 py-4"
-              >
-                Explorar Tours
-              </button>
-            </motion.div>
-
-            {/* Trust badges */}
-            <motion.div
-              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.2 } } }}
-              className="flex flex-wrap gap-2"
-            >
-              {trustBadges.map((badge) => (
-                <span key={badge.label} className="trust-badge">
-                  {badge.icon}
-                  <span className="text-xs font-semibold">{badge.label}</span>
-                </span>
-              ))}
             </motion.div>
           </motion.div>
         </div>
@@ -129,16 +121,24 @@ const Hero: FC = () => {
         transition={{ duration: 2.2, repeat: Infinity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden md:flex flex-col items-center gap-2"
       >
-        <span className="text-white/40 text-xs tracking-widest uppercase font-medium">Explorar</span>
+        <span className="text-white/40 text-xs tracking-widest uppercase font-medium">
+          Explorar
+        </span>
         <div className="w-5 h-9 border-2 border-white/25 rounded-full flex justify-center pt-1.5">
           <div className="w-1 h-2 bg-white/60 rounded-full" />
         </div>
       </motion.div>
 
       {/* Bottom stat bar */}
+      {/*
       <div className="absolute bottom-0 left-0 right-0 z-20">
-        <div className="container mx-auto px-5 lg:px-8">
-          <div className="hidden md:flex items-center gap-8 pb-8">
+        <div className="container mx-auto px-5 lg:px-8 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+            className="hidden md:flex items-center gap-8 pb-8"
+          >
             {[
               { value: "10k+", label: "Clientes satisfechos" },
               { value: "15+", label: "Años de experiencia" },
@@ -146,13 +146,17 @@ const Hero: FC = () => {
               { value: "100%", label: "Guías certificados" },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col">
-                <span className="text-2xl font-extrabold text-cenote-300">{stat.value}</span>
-                <span className="text-white/50 text-xs font-medium">{stat.label}</span>
+                <span className="text-2xl font-extrabold text-cenote-300">
+                  {stat.value}
+                </span>
+                <span className="text-white/50 text-xs font-medium">
+                  {stat.label}
+                </span>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </div>*/}
     </section>
   );
 };

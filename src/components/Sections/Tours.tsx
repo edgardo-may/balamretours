@@ -43,10 +43,10 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge }) 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.07, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
       className={`group relative flex flex-col rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ${
         isDark
           ? "bg-noche-900 border border-noche-800 hover:border-tierra-400/30"
@@ -168,9 +168,10 @@ const SectionHeader: FC<SectionHeaderProps> = ({
   <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
     <div className="max-w-2xl">
       <motion.div
-        initial={{ opacity: 0, x: -16 }}
+        initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="flex items-center gap-2 mb-3"
       >
         {icon}
@@ -179,20 +180,20 @@ const SectionHeader: FC<SectionHeaderProps> = ({
         </span>
       </motion.div>
       <motion.h2
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.08 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
         className={`text-4xl md:text-5xl font-extrabold leading-tight mb-3 ${dark ? "text-white" : "text-noche-900"}`}
       >
         {title}{" "}
         <span className={dark ? "text-tierra-300" : "text-cenote-600"}>{highlight}</span>
       </motion.h2>
       <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.16 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
         className={`leading-relaxed ${dark ? "text-noche-400" : "text-noche-500"}`}
       >
         {description}
@@ -202,8 +203,6 @@ const SectionHeader: FC<SectionHeaderProps> = ({
       linkHref ? (
         <a
           href={linkHref}
-          target="_blank"
-          rel="noopener noreferrer"
           className={`shrink-0 group flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all ${
             dark
               ? "bg-tierra-500 text-white hover:bg-tierra-400"
@@ -211,7 +210,7 @@ const SectionHeader: FC<SectionHeaderProps> = ({
           }`}
         >
           {linkLabel}
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
         </a>
       ) : (
         <Link
@@ -322,10 +321,7 @@ const PrivateToursSection: FC = () => {
               <div className="col-span-full text-center py-16 text-noche-500">
                 <Lock className="w-10 h-10 mx-auto mb-3 opacity-30" />
                 <p className="font-semibold mb-4">No hay tours privados disponibles por el momento.</p>
-                <Link
-                  to="/tours"
-                  className="btn-reserva-tierra inline-flex"
-                >
+                <Link to="/tours" className="btn-reserva-tierra inline-flex">
                   Ver Catálogo General <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -334,9 +330,10 @@ const PrivateToursSection: FC = () => {
 
         {/* Private CTA banner */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="mt-14 bg-gradient-to-r from-tierra-900/60 via-noche-900 to-noche-900 border border-tierra-800/40 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div>
@@ -392,10 +389,10 @@ const OffersSection: FC = () => {
                 return (
                   <motion.div
                     key={tour.id}
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.07 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
                     className="group relative bg-white rounded-3xl overflow-hidden border border-caliza-200 flex flex-col hover:-translate-y-1 transition-all duration-300"
                     style={{ boxShadow: "0 2px 20px rgba(14,75,88,0.07)" }}
                   >
@@ -442,7 +439,6 @@ const OffersSection: FC = () => {
                         </div>
                       </div>
 
-                      {/* Action button */}
                       <div className="mt-4">
                         <Link
                           to={`/tours/${tour.id}`}

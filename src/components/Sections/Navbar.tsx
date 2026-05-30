@@ -19,10 +19,22 @@ const Navbar: React.FC = () => {
   const shouldBeSolid = !isHomePage || isScrolled;
 
   const navLinks = [
-    { name: "Tours Generales", href: isHomePage ? "#tours-generales" : "/tours?tipo=colectivo" },
-    { name: "Tours Privados", href: isHomePage ? "#tours-privados" : "/tours?tipo=privado" },
-    { name: "¿Por qué Balam?", href: isHomePage ? "#beneficios" : "/#beneficios" },
-    { name: "Testimonios", href: isHomePage ? "#testimonios" : "/#testimonios" },
+    {
+      name: "Tours Generales",
+      href: isHomePage ? "#tours-generales" : "/tours?tipo=colectivo",
+    },
+    {
+      name: "Tours Privados",
+      href: isHomePage ? "#tours-privados" : "/tours?tipo=privado",
+    },
+    {
+      name: "¿Por qué Balam?",
+      href: isHomePage ? "#beneficios" : "/#beneficios",
+    },
+    {
+      name: "Testimonios",
+      href: isHomePage ? "#testimonios" : "/#testimonios",
+    },
   ];
 
   const handleNavClick = (href: string) => {
@@ -42,16 +54,19 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-5 lg:px-8 flex items-center justify-between gap-4">
-
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className={`relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl overflow-hidden transition-all ${
-            !shouldBeSolid ? "bg-white/20 backdrop-blur-sm p-1.5" : ""
-          }`}>
+        <Link to="/" className="flex items-center gap-3 shrink-0 group">
+          <div
+            className={`relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-xl overflow-hidden transition-all ${
+              !shouldBeSolid
+                ? "bg-white/80 backdrop-blur-sm p-1.5 shadow-sm"
+                : ""
+            }`}
+          >
             <img
               src="/images/logo-balam.png"
               alt="Balam RE Tours"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 const t = e.target as HTMLImageElement;
                 t.style.display = "none";
@@ -62,17 +77,21 @@ const Navbar: React.FC = () => {
             />
           </div>
           <div className="flex flex-col leading-none">
-            <span className={`text-xl font-black tracking-tight transition-colors ${shouldBeSolid ? "text-noche-950" : "text-white"}`}>
+            <span
+              className={`text-xl md:text-2xl font-black tracking-tight transition-colors ${shouldBeSolid ? "text-noche-950" : "text-white drop-shadow-md"}`}
+            >
               BALAM<span className="text-cenote-600">RE</span>
             </span>
-            <span className={`text-[10px] font-semibold tracking-widest uppercase transition-colors ${shouldBeSolid ? "text-noche-400" : "text-white/60"}`}>
-              Riviera Maya
+            <span
+              className={`text-[10px] md:text-[11px] font-semibold tracking-widest uppercase transition-colors ${shouldBeSolid ? "text-noche-400" : "text-white/90 drop-shadow-md"}`}
+            >
+              Tours & Excursiones
             </span>
           </div>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -94,23 +113,17 @@ const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* Desktop CTAs */}
-        <div className="hidden lg:flex items-center shrink-0">
-          <button
-            onClick={() => navigate("/tours")}
-            className="btn-reserva text-sm px-5 py-2.5"
-          >
-            Reservar Ahora
-          </button>
-        </div>
-
         {/* Mobile toggle */}
         <button
           className={`lg:hidden p-2 rounded-xl transition-colors ${shouldBeSolid ? "text-noche-800 hover:bg-caliza-100" : "text-white hover:bg-white/10"}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Abrir menú"
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
         </button>
       </div>
 
@@ -129,7 +142,9 @@ const Navbar: React.FC = () => {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => {
-                  if (link.href.startsWith("#")) { e.preventDefault(); }
+                  if (link.href.startsWith("#")) {
+                    e.preventDefault();
+                  }
                   handleNavClick(link.href);
                 }}
                 className="flex items-center px-4 py-3 rounded-xl text-base font-semibold text-noche-700 hover:bg-cenote-50 hover:text-cenote-700 transition-colors"
@@ -137,14 +152,6 @@ const Navbar: React.FC = () => {
                 {link.name}
               </a>
             ))}
-            <div className="pt-3 flex flex-col gap-2 border-t border-caliza-200 mt-1">
-              <button
-                onClick={() => { setIsMobileMenuOpen(false); navigate("/tours"); }}
-                className="btn-reserva justify-center"
-              >
-                Ver Todos los Tours
-              </button>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>

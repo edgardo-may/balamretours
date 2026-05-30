@@ -20,10 +20,10 @@ const FinalCTA: React.FC = () => {
 
       <div className="container mx-auto px-5 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-3xl mx-auto text-center"
         >
           {/* Rating row */}

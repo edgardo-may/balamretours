@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
               {[
                 { label: "Tours Colectivos", to: "/tours?tipo=colectivo" },
                 { label: "Tours Privados", to: "/tours?tipo=privado" },
-                { label: "Ofertas Especiales", to: "/tours" },
+                { label: "Ofertas Especiales", to: "/#ofertas-especiales" },
                 { label: "Ver Todo el Catálogo", to: "/tours" },
               ].map((link) => (
                 <li key={link.label}>
@@ -67,15 +67,16 @@ const Footer: React.FC = () => {
             <h4 className="font-bold mb-5 text-sm uppercase tracking-widest text-noche-300">Información</h4>
             <ul className="space-y-3">
               {[
-                "¿Por qué Balam RE?",
-                "Políticas de Cancelación",
-                "Preguntas Frecuentes",
-                "Privacidad y Términos",
+                { label: "¿Por qué Balam RE?", to: "/#beneficios" },
+                { label: "Políticas de Cancelación", to: "/politicas-de-cancelacion" },
+                { label: "Términos y Condiciones", to: "/terminos-y-condiciones" },
+                { label: "Exención de Responsabilidad", to: "/exencion-de-responsabilidad" },
+                { label: "Política de Privacidad", to: "/terminos-y-condiciones#datos" },
               ].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-noche-400 hover:text-cenote-300 transition-colors text-sm">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link to={link.to} className="text-noche-400 hover:text-cenote-300 transition-colors text-sm">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -38,10 +38,10 @@ const Benefits: React.FC = () => {
           {/* Left: copy + benefits grid */}
           <div>
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <span className="section-eyebrow mb-3 block">¿Por qué Balam RE?</span>
               <h2 className="text-4xl md:text-5xl font-extrabold text-noche-900 leading-tight mb-5">
@@ -58,10 +58,10 @@ const Benefits: React.FC = () => {
               {benefits.map((benefit, index) => (
                 <motion.div
                   key={benefit.title}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 + index * 0.08, duration: 0.5 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ delay: 0.1 + index * 0.1, duration: 0.6, ease: "easeOut" }}
                   className="group p-5 rounded-2xl border border-caliza-200 bg-caliza-50 hover:border-cenote-200 hover:bg-cenote-50/50 transition-all duration-300"
                 >
                   <div className="flex items-start gap-4">
@@ -84,10 +84,10 @@ const Benefits: React.FC = () => {
           {/* Right: image + stats overlay */}
           <div className="relative">
             <motion.div
-              initial={{ opacity: 0, x: 32 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
               className="rounded-3xl overflow-hidden shadow-2xl"
             >
               <img
@@ -100,10 +100,10 @@ const Benefits: React.FC = () => {
 
             {/* Stats card */}
             <motion.div
-              initial={{ opacity: 0, y: 32, x: -8 }}
+              initial={{ opacity: 0, y: 30, x: -10 }}
               whileInView={{ opacity: 1, y: 0, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.7 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
               className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-xl border border-caliza-200 hidden md:block"
             >
               <div className="flex items-center gap-6">
@@ -129,10 +129,10 @@ const Benefits: React.FC = () => {
 
             {/* Floating badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
               className="absolute top-6 -right-4 bg-cenote-600 text-white px-4 py-3 rounded-2xl shadow-lg hidden md:flex flex-col items-center"
             >
               <ShieldCheck className="w-6 h-6 mb-1" />
