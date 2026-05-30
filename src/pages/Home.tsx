@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import Navbar from '../components/Sections/Navbar';
 import Hero from '../components/Sections/Hero';
+import OfertasEspeciales from '../components/Sections/OfertasEspeciales';
 import Tours from '../components/Sections/Tours';
 import Benefits from '../components/Sections/Benefits';
 import Testimonials from '../components/Sections/Testimonials';
@@ -16,6 +17,7 @@ const Home: FC = () => {
       
       <main>
         <Hero />
+        <OfertasEspeciales />
         <Tours />
         <Benefits />
         <MapSection />

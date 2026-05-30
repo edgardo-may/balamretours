@@ -6,7 +6,7 @@ const ToursPage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-slate-50 min-h-screen pt-12">
+    <div className="bg-slate-50 min-h-screen pt-32">
       <TourList onSelectTour={(id) => navigate(`/tours/${id}`)} />
     </div>
   );
