@@ -309,7 +309,7 @@ const OfertasEspeciales: FC = () => {
   return (
     <section
       id="ofertas-especiales"
-      className="relative py-20 bg-caliza-100 overflow-hidden"
+      className="relative py-12 md:py-20 bg-caliza-100 overflow-hidden"
     >
       {/* Elementos decorativos */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -319,7 +319,7 @@ const OfertasEspeciales: FC = () => {
 
       <div className="container mx-auto px-5 lg:px-8 relative">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4 md:gap-6">
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, x: -20 }}

@@ -31,9 +31,9 @@ const benefits = [
 
 const Benefits: React.FC = () => {
   return (
-    <section id="beneficios" className="py-24 bg-white overflow-hidden">
+    <section id="beneficios" className="py-12 md:py-24 bg-white overflow-hidden">
       <div className="container mx-auto px-5 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left: copy + benefits grid */}
           <div>
@@ -48,7 +48,7 @@ const Benefits: React.FC = () => {
                 Tu aventura merece ser{" "}
                 <span className="text-cenote-600">perfecta.</span>
               </h2>
-              <p className="text-noche-500 text-lg leading-relaxed mb-12 max-w-lg">
+              <p className="text-noche-500 text-lg leading-relaxed mb-8 md:mb-12 max-w-lg">
                 No somos solo una agencia de tours. Somos tus anfitriones en el paraíso,
                 comprometidos con la calidad, la seguridad y la autenticidad.
               </p>

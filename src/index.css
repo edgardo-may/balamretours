@@ -270,13 +270,12 @@
   100% { background-position: -200% 0; }
 }
 
-/* Arrow nav buttons */
+/* Arrow nav buttons — display controlled by Tailwind (hidden md:flex on mobile) */
 .hero-arrow-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 20;
-  display: flex;
   align-items: center;
   justify-content: center;
   width: 2.5rem;

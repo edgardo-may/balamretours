@@ -386,7 +386,7 @@ const HeroCarousel: FC = () => {
       </div>
 
       {/* ── Content — stagger entrance on mount ── */}
-      <div className="container mx-auto px-5 lg:px-8 relative z-20 pt-28 pb-20">
+      <div className="container mx-auto px-5 lg:px-8 relative z-20 pt-20 pb-12 md:pt-28 md:pb-20">
         <div className="max-w-3xl">
           <motion.div
             initial="hidden"
@@ -396,7 +396,7 @@ const HeroCarousel: FC = () => {
             {/* Eyebrow */}
             <motion.div
               variants={eyebrowEnter}
-              className="flex items-center gap-2 mb-6"
+              className="flex items-center gap-2 mb-4 md:mb-6"
             >
               <Star
                 className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0"
@@ -410,7 +410,7 @@ const HeroCarousel: FC = () => {
             {/* Headline — static, monumental */}
             <motion.h1
               variants={itemEnter}
-              className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[1.05] tracking-tight mb-6"
+              className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[1.05] tracking-tight mb-4 md:mb-6"
             >
               Descubre la{" "}
               <span className="relative inline-block">
@@ -423,7 +423,7 @@ const HeroCarousel: FC = () => {
             {/* Typing phrase — dynamic subtitle */}
             <motion.div
               variants={itemEnter}
-              className="mb-10"
+              className="mb-7 md:mb-10"
               aria-live="polite"
               aria-label={`Experiencia destacada: ${typingTarget}`}
             >
@@ -462,7 +462,7 @@ const HeroCarousel: FC = () => {
             id="hero-prev"
             onClick={goPrev}
             aria-label="Slide anterior"
-            className="hero-arrow-btn left-4 md:left-6"
+            className="hero-arrow-btn hidden md:flex left-4 md:left-6"
           >
             <ChevronLeft
               className="w-5 h-5 text-white"
@@ -474,7 +474,7 @@ const HeroCarousel: FC = () => {
             id="hero-next"
             onClick={goNext}
             aria-label="Siguiente slide"
-            className="hero-arrow-btn right-4 md:right-6"
+            className="hero-arrow-btn hidden md:flex right-4 md:right-6"
           >
             <ChevronRight
               className="w-5 h-5 text-white"

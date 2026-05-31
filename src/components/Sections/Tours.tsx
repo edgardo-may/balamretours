@@ -165,7 +165,7 @@ interface SectionHeaderProps {
 const SectionHeader: FC<SectionHeaderProps> = ({
   eyebrow, title, highlight, description, icon, linkTo, linkLabel, linkHref, dark,
 }) => (
-  <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4 md:gap-6">
     <div className="max-w-2xl">
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -234,10 +234,10 @@ const GeneralToursSection: FC = () => {
   const { tours, loading } = useGeneralTours();
 
   return (
-    <section id="tours-generales" className="py-20 bg-caliza-50 overflow-hidden">
+    <section id="tours-generales" className="py-12 md:py-20 bg-caliza-50 overflow-hidden">
       {/* Decorative top border */}
       <div className="h-1 bg-gradient-to-r from-transparent via-cenote-400/40 to-transparent mb-0" />
-      <div className="container mx-auto px-5 lg:px-8 pt-20">
+      <div className="container mx-auto px-5 lg:px-8 pt-12 md:pt-20">
         <SectionHeader
           eyebrow="Experiencias Compartidas"
           title="Tours"
@@ -285,7 +285,7 @@ const PrivateToursSection: FC = () => {
   const { tours, loading } = usePrivateTours();
 
   return (
-    <section id="tours-privados" className="py-20 bg-noche-950 overflow-hidden relative">
+    <section id="tours-privados" className="py-12 md:py-20 bg-noche-950 overflow-hidden relative">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-tierra-500/8 rounded-full blur-3xl" />
@@ -362,7 +362,7 @@ const OffersSection: FC = () => {
   if (!loading && tours.length === 0) return null;
 
   return (
-    <section id="ofertas" className="py-20 bg-white overflow-hidden">
+    <section id="ofertas" className="py-12 md:py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-5 lg:px-8">
         <SectionHeader
           eyebrow="Tiempo Limitado"
