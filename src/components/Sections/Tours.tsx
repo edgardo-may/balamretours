@@ -11,11 +11,19 @@ import {
   ArrowRight,
   Percent,
   Users,
+  MessageCircle,
 } from "lucide-react";
 import { useGeneralTours, usePrivateTours, useOfferTours } from "../../hooks/useTours";
 import { getPublicImageUrl } from "../../lib/supabase";
 import { Link } from "react-router-dom";
 import type { TourWithDetails } from "../../types/tour";
+
+const WHATSAPP_NUMBER = "529983471258";
+
+const buildWhatsAppUrl = (tourName: string): string => {
+  const message = `Hola, me interesa obtener información sobre el tour privado: ${tourName}\n\n¿Podrían enviarme detalles, disponibilidad y costos?`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+};
 
 // ─── Tour Card reutilizable ────────────────────────────────────────────────────
 interface TourCardProps {
@@ -23,9 +31,10 @@ interface TourCardProps {
   index: number;
   variant?: "light" | "dark";
   badge?: { label: string; variant: "colectivo" | "privado" | "oferta" };
+  isPrivate?: boolean;
 }
 
-const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge }) => {
+const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, isPrivate = false }) => {
   const prices = Array.isArray(tour.prices) ? tour.prices : tour.prices ? [tour.prices] : [];
   const minPrice = prices.length > 0 ? Math.min(...prices.map((p) => p.precio_adulto || 0)) : 0;
   const images = Array.isArray(tour.images) ? tour.images : tour.images ? [tour.images] : [];
@@ -107,37 +116,55 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge }) 
         </p>
 
         {/* Footer */}
-        <div className={`mt-auto pt-4 border-t flex items-end justify-between ${isDark ? "border-noche-800" : "border-caliza-100"}`}>
+        <div className={`mt-auto pt-4 border-t flex items-center justify-between ${isDark ? "border-noche-800" : "border-caliza-100"}`}>
           <div className="flex flex-col gap-1.5">
             <div className={`flex items-center gap-1.5 text-xs font-medium ${isDark ? "text-noche-400" : "text-noche-500"}`}>
               <Clock className={`w-3.5 h-3.5 ${isDark ? "text-tierra-400" : "text-cenote-600"}`} />
               {tour.duracion} {tour.duracion_tipo}
             </div>
           </div>
-          <div className="text-right">
-            <span className={`block text-2xs font-bold uppercase tracking-widest mb-0.5 ${isDark ? "text-noche-500" : "text-noche-400"}`}>
-              Desde
+          {!isPrivate ? (
+            <div className="text-right">
+              <span className={`block text-2xs font-bold uppercase tracking-widest mb-0.5 ${isDark ? "text-noche-500" : "text-noche-400"}`}>
+                Desde
+              </span>
+              <span className={`text-2xl font-extrabold ${isDark ? "text-white" : "text-noche-900"}`}>
+                ${minPrice}
+              </span>
+            </div>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tierra-900/40 border border-tierra-700/50 text-tierra-300 text-2xs font-bold uppercase tracking-wide">
+              <Lock className="w-2.5 h-2.5" /> Precio a consultar
             </span>
-            <span className={`text-2xl font-extrabold ${isDark ? "text-white" : "text-noche-900"}`}>
-              ${minPrice}
-            </span>
-          </div>
+          )}
         </div>
 
         {/* Action button */}
         <div className="mt-4">
-          <Link
-            to={`/tours/${tour.id}`}
-            className={`flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-xs font-bold transition-all ${
-              isDark
-                ? "bg-tierra-500 text-white hover:bg-tierra-600"
-                : "bg-cenote-600 text-white hover:bg-cenote-700"
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            Ver Detalles
-            <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
+          {isPrivate ? (
+            <a
+              href={buildWhatsAppUrl(tour.nombre)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/wa flex items-center justify-center gap-2 w-full py-3 rounded-xl text-xs font-bold transition-all duration-200 bg-[#25D366] text-white hover:bg-[#1fba59] hover:-translate-y-0.5 shadow-[0_4px_16px_rgba(37,211,102,0.30)] hover:shadow-[0_8px_24px_rgba(37,211,102,0.45)] active:translate-y-0"
+            >
+              <MessageCircle className="w-3.5 h-3.5 transition-transform group-hover/wa:scale-110" />
+              Consultar por WhatsApp
+            </a>
+          ) : (
+            <Link
+              to={`/tours/${tour.id}`}
+              className={`flex items-center justify-center gap-1.5 w-full py-3 rounded-xl text-xs font-bold transition-all ${
+                isDark
+                  ? "bg-tierra-500 text-white hover:bg-tierra-600"
+                  : "bg-cenote-600 text-white hover:bg-cenote-700"
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              Ver Detalles
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>
@@ -299,8 +326,6 @@ const PrivateToursSection: FC = () => {
           highlight="Privados"
           description="Diseñados exclusivamente para ti y tus acompañantes. Horarios flexibles, rutas personalizadas y atención de primer nivel."
           icon={<Lock className="w-4 h-4 text-tierra-400" />}
-          linkTo="/tours?tipo=privado"
-          linkLabel="Explorar Privados"
           dark
         />
 
@@ -315,6 +340,7 @@ const PrivateToursSection: FC = () => {
                   index={index}
                   variant="dark"
                   badge={{ label: "Privado", variant: "privado" }}
+                  isPrivate
                 />
               ))
             : (
@@ -342,13 +368,15 @@ const PrivateToursSection: FC = () => {
               Diseñamos tu tour privado desde cero. Destinos, horarios, transporte y experiencias a tu medida. Sin grupos, sin prisa.
             </p>
           </div>
-          <Link
-            to="/tours?tipo=privado"
-            className="shrink-0 btn-reserva-tierra px-8 py-4 text-base"
+          <a
+            href={`https://wa.me/529983471258?text=${encodeURIComponent("Hola, me interesa diseñar un tour privado personalizado. ¿Podrían enviarme información sobre opciones, disponibilidad y costos?")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 group flex items-center gap-2.5 px-8 py-4 text-base font-bold rounded-2xl transition-all duration-200 bg-[#25D366] text-white hover:bg-[#1fba59] hover:-translate-y-0.5 shadow-[0_6px_28px_rgba(37,211,102,0.35)] hover:shadow-[0_12px_40px_rgba(37,211,102,0.50)] active:translate-y-0"
           >
-            Ver Catálogo Privado
-            <ArrowRight className="w-5 h-5 ml-1 inline-block" />
-          </Link>
+            <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" />
+            Consultar por WhatsApp
+          </a>
         </motion.div>
       </div>
     </section>

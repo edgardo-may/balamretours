@@ -1,40 +1,46 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, Users, Map, CreditCard, Star } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { ShieldCheck, Users, Map, CreditCard, Star } from "lucide-react";
 
 const benefits = [
   {
     icon: <ShieldCheck className="w-6 h-6 text-cenote-600" />,
-    title: 'Guías Certificados',
-    description: 'Expertos locales apasionados con años de experiencia en historia maya, flora y fauna.',
-    stat: '15+ años',
+    title: "Guías Certificados",
+    description:
+      "Expertos locales apasionados con años de experiencia en historia maya, flora y fauna.",
+    stat: "15+ años",
   },
   {
     icon: <Users className="w-6 h-6 text-cenote-600" />,
-    title: 'Grupos Pequeños',
-    description: 'Grupos reducidos para asegurar atención personalizada y la mejor experiencia posible.',
-    stat: 'Máx. 15 pers.',
+    title: "Grupos Pequeños",
+    description:
+      "Grupos reducidos para asegurar atención personalizada y la mejor experiencia posible.",
+    stat: "Máx. 15 pers.",
   },
   {
     icon: <Map className="w-6 h-6 text-cenote-600" />,
-    title: 'Transporte Incluido',
-    description: 'Recogida desde tu hotel en Playa del Carmen, Tulum o PDC. Sin preocupaciones extra.',
-    stat: 'Pickup incluido',
+    title: "Transporte Incluido",
+    description:
+      "Recogida desde tu hotel en Playa del Carmen, Tulum o Cancun. Sin preocupaciones extra.",
+    stat: "Pickup incluido",
   },
   {
     icon: <CreditCard className="w-6 h-6 text-cenote-600" />,
-    title: 'Pago Seguro',
-    description: 'Reserva con total seguridad. Anticipo mínimo y pago del resto el día del tour.',
-    stat: 'Anticipo 30%',
+    title: "Pago Seguro",
+    description:
+      "Reserva con total seguridad. Anticipo mínimo y pago del resto el día del tour.",
+    stat: "Anticipo 30%",
   },
 ];
 
 const Benefits: React.FC = () => {
   return (
-    <section id="beneficios" className="py-12 md:py-24 bg-white overflow-hidden">
+    <section
+      id="beneficios"
+      className="py-12 md:py-24 bg-white overflow-hidden"
+    >
       <div className="container mx-auto px-5 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-
           {/* Left: copy + benefits grid */}
           <div>
             <motion.div
@@ -43,14 +49,17 @@ const Benefits: React.FC = () => {
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              <span className="section-eyebrow mb-3 block">¿Por qué Balam RE?</span>
+              <span className="section-eyebrow mb-3 block">
+                ¿Por qué Balam RE?
+              </span>
               <h2 className="text-4xl md:text-5xl font-extrabold text-noche-900 leading-tight mb-5">
                 Tu aventura merece ser{" "}
                 <span className="text-cenote-600">perfecta.</span>
               </h2>
               <p className="text-noche-500 text-lg leading-relaxed mb-8 md:mb-12 max-w-lg">
-                No somos solo una agencia de tours. Somos tus anfitriones en el paraíso,
-                comprometidos con la calidad, la seguridad y la autenticidad.
+                No somos solo una agencia de tours. Somos tus anfitriones en el
+                paraíso, comprometidos con la calidad, la seguridad y la
+                autenticidad.
               </p>
             </motion.div>
 
@@ -61,7 +70,11 @@ const Benefits: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.1 }}
-                  transition={{ delay: 0.1 + index * 0.1, duration: 0.6, ease: "easeOut" }}
+                  transition={{
+                    delay: 0.1 + index * 0.1,
+                    duration: 0.6,
+                    ease: "easeOut",
+                  }}
                   className="group p-5 rounded-2xl border border-caliza-200 bg-caliza-50 hover:border-cenote-200 hover:bg-cenote-50/50 transition-all duration-300"
                 >
                   <div className="flex items-start gap-4">
@@ -69,8 +82,12 @@ const Benefits: React.FC = () => {
                       {benefit.icon}
                     </div>
                     <div>
-                      <h4 className="font-bold text-noche-900 mb-1">{benefit.title}</h4>
-                      <p className="text-noche-500 text-sm leading-relaxed">{benefit.description}</p>
+                      <h4 className="font-bold text-noche-900 mb-1">
+                        {benefit.title}
+                      </h4>
+                      <p className="text-noche-500 text-sm leading-relaxed">
+                        {benefit.description}
+                      </p>
                       <span className="mt-2 inline-block text-2xs font-bold uppercase tracking-widest text-cenote-600 bg-cenote-50 border border-cenote-100 px-2.5 py-1 rounded-full">
                         {benefit.stat}
                       </span>
@@ -108,21 +125,33 @@ const Benefits: React.FC = () => {
             >
               <div className="flex items-center gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-extrabold text-cenote-600">10k+</div>
-                  <div className="text-2xs font-bold uppercase tracking-widest text-noche-400 mt-0.5">Clientes</div>
+                  <div className="text-3xl font-extrabold text-cenote-600">
+                    10k+
+                  </div>
+                  <div className="text-2xs font-bold uppercase tracking-widest text-noche-400 mt-0.5">
+                    Clientes
+                  </div>
                 </div>
                 <div className="w-px h-10 bg-caliza-200" />
                 <div className="text-center">
-                  <div className="text-3xl font-extrabold text-cenote-600">15+</div>
-                  <div className="text-2xs font-bold uppercase tracking-widest text-noche-400 mt-0.5">Años Exp.</div>
+                  <div className="text-3xl font-extrabold text-cenote-600">
+                    15+
+                  </div>
+                  <div className="text-2xs font-bold uppercase tracking-widest text-noche-400 mt-0.5">
+                    Años Exp.
+                  </div>
                 </div>
                 <div className="w-px h-10 bg-caliza-200" />
                 <div className="text-center">
                   <div className="flex items-center gap-1 justify-center">
-                    <span className="text-3xl font-extrabold text-amber-500">5.0</span>
+                    <span className="text-3xl font-extrabold text-amber-500">
+                      5.0
+                    </span>
                     <Star className="w-5 h-5 fill-amber-400 text-amber-400 mt-0.5" />
                   </div>
-                  <div className="text-2xs font-bold uppercase tracking-widest text-noche-400 mt-0.5">Rating</div>
+                  <div className="text-2xs font-bold uppercase tracking-widest text-noche-400 mt-0.5">
+                    Rating
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -136,7 +165,11 @@ const Benefits: React.FC = () => {
               className="absolute top-6 -right-4 bg-cenote-600 text-white px-4 py-3 rounded-2xl shadow-lg hidden md:flex flex-col items-center"
             >
               <ShieldCheck className="w-6 h-6 mb-1" />
-              <span className="text-2xs font-bold uppercase tracking-wider text-center leading-tight">100%<br />Certificados</span>
+              <span className="text-2xs font-bold uppercase tracking-wider text-center leading-tight">
+                100%
+                <br />
+                Certificados
+              </span>
             </motion.div>
           </div>
         </div>

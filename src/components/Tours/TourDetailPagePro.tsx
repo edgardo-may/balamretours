@@ -15,6 +15,8 @@ import {
   Users,
   Lock,
   Phone,
+  MessageCircle,
+  Sparkles,
 } from "lucide-react";
 import Navbar from "../Sections/Navbar";
 import Footer from "../Sections/Footer";
@@ -23,6 +25,13 @@ import { getPublicImageUrl } from "../../lib/supabase";
 import { Toaster } from "sonner";
 import { motion } from "framer-motion";
 import FloatingWhatsApp from "../Ui/FloatingWhatsApp";
+
+const WHATSAPP_NUMBER = "529983471258";
+
+const buildWhatsAppUrl = (tourName: string): string => {
+  const message = `Hola, me interesa obtener información sobre el tour privado: ${tourName}\n\n¿Podrían enviarme detalles, disponibilidad y costos?`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+};
 
 const TourDetailPagePro: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -208,18 +217,86 @@ const TourDetailPagePro: FC = () => {
 
             </div>
 
-            {/* ── Columna derecha (booking) ── */}
+            {/* ── Columna derecha (booking / WhatsApp) ── */}
             <div className="lg:col-span-5">
               <div className="lg:sticky lg:top-24">
-                <BookingFormPro tour={tour} />
+                {isPrivado ? (
+                  /* ─── Panel WhatsApp exclusivo para tours privados ─── */
+                  <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="bg-noche-950 rounded-3xl overflow-hidden border border-noche-800"
+                    style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.35)" }}
+                  >
+                    {/* Header */}
+                    <div className="px-7 py-5 border-b border-noche-800 bg-gradient-to-r from-tierra-900/50 to-noche-900">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-9 h-9 rounded-2xl bg-tierra-500/20 border border-tierra-500/30 flex items-center justify-center flex-shrink-0">
+                          <Lock className="w-4 h-4 text-tierra-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-extrabold text-white leading-tight">Tour Privado Exclusivo</h3>
+                          <p className="text-noche-400 text-xs mt-0.5">Cotización personalizada</p>
+                        </div>
+                      </div>
+                      <p className="text-noche-300 text-sm leading-relaxed">
+                        Este tour se diseña a tu medida. El precio varía según grupo, fechas y personalización.
+                        Contáctanos para recibir una propuesta exclusiva.
+                      </p>
+                    </div>
 
-                {/* Trust notes below form */}
+                    {/* Beneficios */}
+                    <div className="px-7 py-5 space-y-3 border-b border-noche-800/60">
+                      {[
+                        { icon: <Sparkles className="w-4 h-4 text-tierra-400" />, text: "Experiencia 100% personalizada" },
+                        { icon: <Users className="w-4 h-4 text-tierra-400" />, text: "Solo tú y tus acompañantes" },
+                        { icon: <Clock className="w-4 h-4 text-tierra-400" />, text: "Horarios flexibles a tu conveniencia" },
+                        { icon: <ShieldCheck className="w-4 h-4 text-tierra-400" />, text: "Guía experto dedicado exclusivamente" },
+                      ].map((item) => (
+                        <div key={item.text} className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-xl bg-tierra-900/50 border border-tierra-800/60 flex items-center justify-center flex-shrink-0">
+                            {item.icon}
+                          </div>
+                          <span className="text-noche-300 text-sm font-medium">{item.text}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* CTA Principal */}
+                    <div className="px-7 py-6">
+                      <p className="text-xs text-noche-400 font-medium mb-4 text-center">
+                        Respuesta en menos de 2 horas · Sin compromiso
+                      </p>
+                      <a
+                        href={buildWhatsAppUrl(tour.nombre)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-bold text-base transition-all duration-200 bg-[#25D366] text-white hover:bg-[#1fba59] hover:-translate-y-0.5 shadow-[0_6px_28px_rgba(37,211,102,0.38)] hover:shadow-[0_12px_40px_rgba(37,211,102,0.55)] active:translate-y-0"
+                      >
+                        <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" />
+                        Consultar por WhatsApp
+                      </a>
+                      <a
+                        href={`tel:+${WHATSAPP_NUMBER}`}
+                        className="flex items-center justify-center gap-2 w-full mt-3 py-3 rounded-2xl font-semibold text-sm transition-all duration-200 border border-noche-700 text-noche-300 hover:border-noche-600 hover:text-white hover:bg-noche-800"
+                      >
+                        <Phone className="w-4 h-4" />
+                        Solicitar Información por Teléfono
+                      </a>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <BookingFormPro tour={tour} />
+                )}
+
+                {/* Trust notes below */}
                 <div className="mt-4 bg-white rounded-2xl p-4 border border-caliza-200">
                   <div className="flex flex-col gap-2.5">
                     {[
-                      { icon: <ShieldCheck className="w-4 h-4 text-cenote-600" />, text: "Reserva segura y confirmación inmediata" },
+                      { icon: <ShieldCheck className="w-4 h-4 text-cenote-600" />, text: isPrivado ? "Cotización personalizada sin compromiso" : "Reserva segura y confirmación inmediata" },
                       { icon: <CheckCircle2 className="w-4 h-4 text-selva-600" />, text: "Cancelación flexible — consultar términos" },
-                      { icon: <Phone className="w-4 h-4 text-[#25D366]" />, text: "Soporte vía WhatsApp durante toda tu reserva" },
+                      { icon: <Phone className="w-4 h-4 text-[#25D366]" />, text: isPrivado ? "Asesor personal vía WhatsApp" : "Soporte vía WhatsApp durante toda tu reserva" },
                     ].map((note) => (
                       <div key={note.text} className="flex items-center gap-2.5">
                         {note.icon}
