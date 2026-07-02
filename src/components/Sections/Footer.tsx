@@ -60,6 +60,7 @@ const Footer: React.FC = () => {
                 { label: "Tours Privados", to: "/tours?tipo=privado" },
                 { label: "Ofertas Especiales", to: "/#ofertas-especiales" },
                 { label: "Ver Todo el Catálogo", to: "/tours" },
+                { label: "Cotizar Transporte Privado", to: "/cotizacion-transporte" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link

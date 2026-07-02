@@ -87,3 +87,30 @@ export interface Reservation {
   telefono_cliente?: string;
   created_at?: string;
 }
+
+// ── Cotización de Transporte Privado ──────────────────────────────────────────
+export type TransportVehicleType = 'sedan' | 'suv' | 'van' | 'sprinter';
+export type TransportQuotationStatus = 'pendiente' | 'contactado' | 'confirmado' | 'rechazado';
+
+export interface TransportQuotation {
+  id?: string;
+  folio?: string;
+  // Datos del cliente
+  nombre: string;
+  telefono: string;
+  email?: string;
+  // Detalle del servicio
+  fecha_servicio: string;
+  hora_aproximada?: string;
+  lugar_recogida: string;
+  destino: string;
+  num_pasajeros: number;
+  // Preferencias
+  tipo_vehiculo?: TransportVehicleType;
+  equipaje?: string;
+  comentarios?: string;
+  // Administración (para panel futuro)
+  estado?: TransportQuotationStatus;
+  notas_internas?: string;
+  created_at?: string;
+}

@@ -34,7 +34,13 @@ const Navbar: React.FC = () => {
       name: "Testimonios",
       href: isHomePage ? "#testimonios" : "/#testimonios",
     },
+    {
+      name: "Transporte Privado",
+      href: "/cotizacion-transporte",
+      highlight: true,
+    },
   ];
+
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
@@ -90,25 +96,39 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6">
           {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => {
-                if (link.href.startsWith("#")) {
-                  e.preventDefault();
-                  handleNavClick(link.href);
-                }
-              }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                shouldBeSolid
-                  ? "text-noche-600 hover:text-cenote-700 hover:bg-cenote-50"
-                  : "text-white/85 hover:text-white hover:bg-white/10"
-              }`}
-            >
-              {link.name}
-            </a>
+            link.highlight ? (
+              <a
+                key={link.name}
+                href={link.href}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border ${
+                  shouldBeSolid
+                    ? "border-tierra-300 text-tierra-700 bg-tierra-50 hover:bg-tierra-100 hover:border-tierra-400"
+                    : "border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50"
+                }`}
+              >
+                {link.name}
+              </a>
+            ) : (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  if (link.href.startsWith("#")) {
+                    e.preventDefault();
+                    handleNavClick(link.href);
+                  }
+                }}
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                  shouldBeSolid
+                    ? "text-noche-600 hover:text-cenote-700 hover:bg-cenote-50"
+                    : "text-white/85 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {link.name}
+              </a>
+            )
           ))}
         </div>
 
@@ -146,7 +166,11 @@ const Navbar: React.FC = () => {
                   }
                   handleNavClick(link.href);
                 }}
-                className="flex items-center px-4 py-3 rounded-xl text-base font-semibold text-noche-700 hover:bg-cenote-50 hover:text-cenote-700 transition-colors"
+                className={`flex items-center px-4 py-3 rounded-xl text-base font-semibold transition-colors ${
+                  link.highlight
+                    ? "text-tierra-700 bg-tierra-50 hover:bg-tierra-100"
+                    : "text-noche-700 hover:bg-cenote-50 hover:text-cenote-700"
+                }`}
               >
                 {link.name}
               </a>

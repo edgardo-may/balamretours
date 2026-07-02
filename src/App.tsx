@@ -6,6 +6,8 @@ import TourDetailPagePro from './components/Tours/TourDetailPagePro';
 import PoliticasCancelacion from './pages/PoliticasCancelacion';
 import TerminosCondiciones from './pages/TerminosCondiciones';
 import ExencionResponsabilidad from './pages/ExencionResponsabilidad';
+import TransportQuotationPage from './components/Transportation/TransportQuotationPage';
+
 
 const App: FC = () => {
   return (
@@ -16,6 +18,7 @@ const App: FC = () => {
       <Route path="/politicas-de-cancelacion" element={<PoliticasCancelacion />} />
       <Route path="/terminos-y-condiciones" element={<TerminosCondiciones />} />
       <Route path="/exencion-de-responsabilidad" element={<ExencionResponsabilidad />} />
+      <Route path="/cotizacion-transporte" element={<TransportQuotationPage />} />
     </Routes>
   );
 };
