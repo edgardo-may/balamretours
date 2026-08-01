@@ -114,3 +114,16 @@ export interface TransportQuotation {
   notas_internas?: string;
   created_at?: string;
 }
+
+// ── Formulario de Contacto ───────────────────────────────────────────────────
+export interface ContactMessage {
+  id?: string;
+  nombre: string;
+  email: string;
+  asunto?: string;
+  mensaje: string;
+  ip?: string;
+  user_agent?: string;
+  created_at?: string;
+  updated_at?: string;
+}

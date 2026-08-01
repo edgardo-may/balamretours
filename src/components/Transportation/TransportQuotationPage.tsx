@@ -629,50 +629,53 @@ const TransportQuotationPage: React.FC = () => {
             </div>
 
             {/* ── CTA buttons ── */}
-            <div className="space-y-3">
-              <motion.button
-                type="submit"
-                id="tr-submit"
-                disabled={loading}
-                whileHover={!loading ? { scale: 1.015 } : {}}
-                whileTap={!loading ? { scale: 0.985 } : {}}
-                className={`w-full flex items-center justify-center gap-2.5 px-8 py-4.5 rounded-2xl text-sm font-bold transition-all duration-200
-                  ${loading
-                    ? 'bg-cenote-400 text-white cursor-not-allowed'
-                    : 'bg-cenote-600 text-white hover:bg-cenote-700 hover:-translate-y-0.5'
-                  }`}
-                style={{ boxShadow: loading ? 'none' : '0 8px 30px rgba(14,138,158,0.35)' }}
-              >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    Enviando solicitud...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    Solicitar cotización
-                    <ArrowRight className="w-4 h-4 opacity-70" />
-                  </>
-                )}
-              </motion.button>
+            <div className="space-y-4">
+              {/* Primary actions: equal-width grid on desktop, stacked on mobile */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <motion.button
+                  type="submit"
+                  id="tr-submit"
+                  disabled={loading}
+                  whileHover={!loading ? { scale: 1.015 } : {}}
+                  whileTap={!loading ? { scale: 0.985 } : {}}
+                  className={`flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-200 w-full
+                    ${loading
+                      ? 'bg-cenote-400 text-white cursor-not-allowed'
+                      : 'bg-cenote-600 text-white hover:bg-cenote-700 hover:-translate-y-0.5'
+                    }`}
+                  style={{ boxShadow: loading ? 'none' : '0 8px 30px rgba(14,138,158,0.35)' }}
+                >
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Enviando...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 shrink-0" />
+                      Solicitar cotización
+                      <ArrowRight className="w-4 h-4 opacity-70 shrink-0" />
+                    </>
+                  )}
+                </motion.button>
 
-              <a
-                id="tr-whatsapp-cta"
-                href={buildWhatsAppUrl(form)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-sm font-bold bg-[#25D366] text-white hover:bg-[#1fba59] transition-all duration-200 hover:-translate-y-0.5"
-                style={{ boxShadow: '0 8px 32px rgba(37,211,102,0.30)' }}
-              >
-                <MessageCircle className="w-4 h-4" />
-                Contactar directamente por WhatsApp
-              </a>
+                <a
+                  id="tr-whatsapp-cta"
+                  href={buildWhatsAppUrl(form)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-sm font-bold bg-[#25D366] text-white hover:bg-[#1fba59] transition-all duration-200 hover:-translate-y-0.5 w-full"
+                  style={{ boxShadow: '0 8px 32px rgba(37,211,102,0.30)' }}
+                >
+                  <MessageCircle className="w-4 h-4 shrink-0" />
+                  Contactar por WhatsApp
+                </a>
+              </div>
 
-              <p className="text-center text-xs text-noche-400 font-medium pt-1">
+              <p className="text-center text-xs text-noche-400 font-medium">
                 Al enviar, aceptas que un asesor se ponga en contacto contigo.
               </p>
             </div>

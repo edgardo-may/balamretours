@@ -35,6 +35,10 @@ const Navbar: React.FC = () => {
       href: isHomePage ? "#testimonios" : "/#testimonios",
     },
     {
+      name: "Contacto",
+      href: isHomePage ? "#contacto" : "/#contacto",
+    },
+    {
       name: "Transporte Privado",
       href: "/cotizacion-transporte",
       highlight: true,
