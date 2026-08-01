@@ -13,7 +13,11 @@ import {
   Users,
   MessageCircle,
 } from "lucide-react";
-import { useGeneralTours, usePrivateTours, useOfferTours } from "../../hooks/useTours";
+import {
+  useGeneralTours,
+  usePrivateTours,
+  useOfferTours,
+} from "../../hooks/useTours";
 import { getPublicImageUrl } from "../../lib/supabase";
 import { Link } from "react-router-dom";
 import type { TourWithDetails } from "../../types/tour";
@@ -34,12 +38,32 @@ interface TourCardProps {
   isPrivate?: boolean;
 }
 
-const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, isPrivate = false }) => {
-  const prices = Array.isArray(tour.prices) ? tour.prices : tour.prices ? [tour.prices] : [];
-  const minPrice = prices.length > 0 ? Math.min(...prices.map((p) => p.precio_adulto || 0)) : 0;
-  const images = Array.isArray(tour.images) ? tour.images : tour.images ? [tour.images] : [];
+const TourCard: FC<TourCardProps> = ({
+  tour,
+  index,
+  variant = "light",
+  badge,
+  isPrivate = false,
+}) => {
+  const prices = Array.isArray(tour.prices)
+    ? tour.prices
+    : tour.prices
+      ? [tour.prices]
+      : [];
+  const minPrice =
+    prices.length > 0
+      ? Math.min(...prices.map((p) => p.precio_adulto || 0))
+      : 0;
+  const images = Array.isArray(tour.images)
+    ? tour.images
+    : tour.images
+      ? [tour.images]
+      : [];
   const mainImage =
-    getPublicImageUrl(images.find((img) => img.is_main)?.url || images[0]?.url, "tour_images") ||
+    getPublicImageUrl(
+      images.find((img) => img.is_main)?.url || images[0]?.url,
+      "tour_images",
+    ) ||
     "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800";
 
   const isDark = variant === "dark";
@@ -61,7 +85,11 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, is
           ? "bg-noche-900 border border-noche-800 hover:border-tierra-400/30"
           : "bg-white border border-caliza-200"
       }`}
-      style={{ boxShadow: isDark ? "0 2px 20px rgba(0,0,0,0.3)" : "0 2px 20px rgba(14,75,88,0.07)" }}
+      style={{
+        boxShadow: isDark
+          ? "0 2px 20px rgba(0,0,0,0.3)"
+          : "0 2px 20px rgba(14,75,88,0.07)",
+      }}
     >
       {/* Image */}
       <div className="relative h-56 overflow-hidden">
@@ -71,7 +99,9 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, is
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
-        <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-noche-900/70" : "from-black/30"} to-transparent`} />
+        <div
+          className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-noche-900/70" : "from-black/30"} to-transparent`}
+        />
 
         {/* Top badges */}
         <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
@@ -82,16 +112,24 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, is
               {badge.label}
             </span>
           )}
-          <span className={`tour-badge ${isDark ? "bg-noche-800/90 text-caliza-300 border border-noche-700" : "bg-white/90 text-noche-700 border border-caliza-200 backdrop-blur-sm"}`}>
+          <span
+            className={`tour-badge ${isDark ? "bg-noche-800/90 text-caliza-300 border border-noche-700" : "bg-white/90 text-noche-700 border border-caliza-200 backdrop-blur-sm"}`}
+          >
             {tour.categoria}
           </span>
         </div>
 
         {/* Rating */}
         <div className="absolute top-4 right-4">
-          <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full ${isDark ? "bg-noche-800/90" : "bg-white/90 backdrop-blur-sm"}`}>
+          <div
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-full ${isDark ? "bg-noche-800/90" : "bg-white/90 backdrop-blur-sm"}`}
+          >
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className={`text-xs font-bold ${isDark ? "text-white" : "text-noche-800"}`}>5.0</span>
+            <span
+              className={`text-xs font-bold ${isDark ? "text-white" : "text-noche-800"}`}
+            >
+              5.0
+            </span>
           </div>
         </div>
       </div>
@@ -99,36 +137,54 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, is
       {/* Body */}
       <div className="p-5 flex flex-col flex-grow">
         <div className="flex items-center gap-1.5 mb-1.5">
-          <MapPin className={`w-3.5 h-3.5 ${isDark ? "text-cenote-400" : "text-cenote-600"}`} />
-          <span className={`text-2xs font-bold uppercase tracking-widest ${isDark ? "text-noche-400" : "text-noche-400"}`}>
+          <MapPin
+            className={`w-3.5 h-3.5 ${isDark ? "text-cenote-400" : "text-cenote-600"}`}
+          />
+          <span
+            className={`text-2xs font-bold uppercase tracking-widest ${isDark ? "text-noche-400" : "text-noche-400"}`}
+          >
             {tour.ubicacion || "Riviera Maya"}
           </span>
         </div>
-        <h3 className={`text-lg font-bold mb-2 line-clamp-1 transition-colors ${
-          isDark
-            ? "text-white group-hover:text-tierra-300"
-            : "text-noche-900 group-hover:text-cenote-700"
-        }`}>
+        <h3
+          className={`text-lg font-bold mb-2 line-clamp-1 transition-colors ${
+            isDark
+              ? "text-white group-hover:text-tierra-300"
+              : "text-noche-900 group-hover:text-cenote-700"
+          }`}
+        >
           {tour.nombre}
         </h3>
-        <p className={`text-sm line-clamp-2 mb-4 leading-relaxed ${isDark ? "text-noche-400" : "text-noche-500"}`}>
+        <p
+          className={`text-sm line-clamp-2 mb-4 leading-relaxed ${isDark ? "text-noche-400" : "text-noche-500"}`}
+        >
           {tour.descripcion}
         </p>
 
         {/* Footer */}
-        <div className={`mt-auto pt-4 border-t flex items-center justify-between ${isDark ? "border-noche-800" : "border-caliza-100"}`}>
+        <div
+          className={`mt-auto pt-4 border-t flex items-center justify-between ${isDark ? "border-noche-800" : "border-caliza-100"}`}
+        >
           <div className="flex flex-col gap-1.5">
-            <div className={`flex items-center gap-1.5 text-xs font-medium ${isDark ? "text-noche-400" : "text-noche-500"}`}>
-              <Clock className={`w-3.5 h-3.5 ${isDark ? "text-tierra-400" : "text-cenote-600"}`} />
+            <div
+              className={`flex items-center gap-1.5 text-xs font-medium ${isDark ? "text-noche-400" : "text-noche-500"}`}
+            >
+              <Clock
+                className={`w-3.5 h-3.5 ${isDark ? "text-tierra-400" : "text-cenote-600"}`}
+              />
               {tour.duracion} {tour.duracion_tipo}
             </div>
           </div>
           {!isPrivate ? (
             <div className="text-right">
-              <span className={`block text-2xs font-bold uppercase tracking-widest mb-0.5 ${isDark ? "text-noche-500" : "text-noche-400"}`}>
+              <span
+                className={`block text-2xs font-bold uppercase tracking-widest mb-0.5 ${isDark ? "text-noche-500" : "text-noche-400"}`}
+              >
                 Desde
               </span>
-              <span className={`text-2xl font-extrabold ${isDark ? "text-white" : "text-noche-900"}`}>
+              <span
+                className={`text-2xl font-extrabold ${isDark ? "text-white" : "text-noche-900"}`}
+              >
                 ${minPrice}
               </span>
             </div>
@@ -173,7 +229,9 @@ const TourCard: FC<TourCardProps> = ({ tour, index, variant = "light", badge, is
 
 // ─── Skeleton ──────────────────────────────────────────────────────────────────
 const TourSkeleton: FC<{ dark?: boolean }> = ({ dark }) => (
-  <div className={`animate-pulse rounded-3xl h-[440px] ${dark ? "bg-noche-800" : "bg-caliza-100"}`} />
+  <div
+    className={`animate-pulse rounded-3xl h-[440px] ${dark ? "bg-noche-800" : "bg-caliza-100"}`}
+  />
 );
 
 // ─── Section Header ────────────────────────────────────────────────────────────
@@ -190,7 +248,15 @@ interface SectionHeaderProps {
 }
 
 const SectionHeader: FC<SectionHeaderProps> = ({
-  eyebrow, title, highlight, description, icon, linkTo, linkLabel, linkHref, dark,
+  eyebrow,
+  title,
+  highlight,
+  description,
+  icon,
+  linkTo,
+  linkLabel,
+  linkHref,
+  dark,
 }) => (
   <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4 md:gap-6">
     <div className="max-w-2xl">
@@ -202,7 +268,9 @@ const SectionHeader: FC<SectionHeaderProps> = ({
         className="flex items-center gap-2 mb-3"
       >
         {icon}
-        <span className={`text-2xs font-bold uppercase tracking-brand ${dark ? "text-cenote-400" : "text-cenote-600"}`}>
+        <span
+          className={`text-2xs font-bold uppercase tracking-brand ${dark ? "text-cenote-400" : "text-cenote-600"}`}
+        >
           {eyebrow}
         </span>
       </motion.div>
@@ -214,7 +282,9 @@ const SectionHeader: FC<SectionHeaderProps> = ({
         className={`text-4xl md:text-5xl font-extrabold leading-tight mb-3 ${dark ? "text-white" : "text-noche-900"}`}
       >
         {title}{" "}
-        <span className={dark ? "text-tierra-300" : "text-cenote-600"}>{highlight}</span>
+        <span className={dark ? "text-tierra-300" : "text-cenote-600"}>
+          {highlight}
+        </span>
       </motion.h2>
       <motion.p
         initial={{ opacity: 0, y: 20 }}
@@ -226,8 +296,9 @@ const SectionHeader: FC<SectionHeaderProps> = ({
         {description}
       </motion.p>
     </div>
-    {(linkTo || linkHref) && linkLabel && (
-      linkHref ? (
+    {(linkTo || linkHref) &&
+      linkLabel &&
+      (linkHref ? (
         <a
           href={linkHref}
           className={`shrink-0 group flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all ${
@@ -251,8 +322,7 @@ const SectionHeader: FC<SectionHeaderProps> = ({
           {linkLabel}
           <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
         </Link>
-      )
-    )}
+      ))}
   </div>
 );
 
@@ -261,7 +331,10 @@ const GeneralToursSection: FC = () => {
   const { tours, loading } = useGeneralTours();
 
   return (
-    <section id="tours-generales" className="py-12 md:py-20 bg-caliza-50 overflow-hidden">
+    <section
+      id="tours-generales"
+      className="py-12 md:py-20 bg-caliza-50 overflow-hidden"
+    >
       {/* Decorative top border */}
       <div className="h-1 bg-gradient-to-r from-transparent via-cenote-400/40 to-transparent mb-0" />
       <div className="container mx-auto px-5 lg:px-8 pt-12 md:pt-20">
@@ -276,10 +349,12 @@ const GeneralToursSection: FC = () => {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading
-            ? [1, 2, 3].map((i) => <TourSkeleton key={i} />)
-            : tours.length > 0
-            ? tours.slice(0, 6).map((tour, index) => (
+          {loading ? (
+            [1, 2, 3].map((i) => <TourSkeleton key={i} />)
+          ) : tours.length > 0 ? (
+            tours
+              .slice(0, 6)
+              .map((tour, index) => (
                 <TourCard
                   key={tour.id}
                   tour={tour}
@@ -287,12 +362,14 @@ const GeneralToursSection: FC = () => {
                   badge={{ label: "Grupal", variant: "colectivo" }}
                 />
               ))
-            : (
-              <div className="col-span-full text-center py-16 text-noche-400">
-                <Sparkles className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                <p className="font-semibold">No hay tours generales disponibles por el momento.</p>
-              </div>
-            )}
+          ) : (
+            <div className="col-span-full text-center py-16 text-noche-400">
+              <Sparkles className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <p className="font-semibold">
+                No hay tours generales disponibles por el momento.
+              </p>
+            </div>
+          )}
         </div>
 
         {!loading && tours.length > 6 && (
@@ -312,7 +389,10 @@ const PrivateToursSection: FC = () => {
   const { tours, loading } = usePrivateTours();
 
   return (
-    <section id="tours-privados" className="py-12 md:py-20 bg-noche-950 overflow-hidden relative">
+    <section
+      id="tours-privados"
+      className="py-12 md:py-20 bg-noche-950 overflow-hidden relative"
+    >
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-tierra-500/8 rounded-full blur-3xl" />
@@ -330,10 +410,12 @@ const PrivateToursSection: FC = () => {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading
-            ? [1, 2, 3].map((i) => <TourSkeleton key={i} dark />)
-            : tours.length > 0
-            ? tours.slice(0, 6).map((tour, index) => (
+          {loading ? (
+            [1, 2, 3].map((i) => <TourSkeleton key={i} dark />)
+          ) : tours.length > 0 ? (
+            tours
+              .slice(0, 6)
+              .map((tour, index) => (
                 <TourCard
                   key={tour.id}
                   tour={tour}
@@ -343,41 +425,18 @@ const PrivateToursSection: FC = () => {
                   isPrivate
                 />
               ))
-            : (
-              <div className="col-span-full text-center py-16 text-noche-500">
-                <Lock className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                <p className="font-semibold mb-4">No hay tours privados disponibles por el momento.</p>
-                <Link to="/tours" className="btn-reserva-tierra inline-flex">
-                  Ver Catálogo General <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            )}
+          ) : (
+            <div className="col-span-full text-center py-16 text-noche-500">
+              <Lock className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <p className="font-semibold mb-4">
+                No hay tours privados disponibles por el momento.
+              </p>
+              <Link to="/tours" className="btn-reserva-tierra inline-flex">
+                Ver Catálogo General <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </div>
-
-        {/* Private CTA banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mt-14 bg-gradient-to-r from-tierra-900/60 via-noche-900 to-noche-900 border border-tierra-800/40 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6"
-        >
-          <div>
-            <h3 className="text-2xl font-extrabold text-white mb-2">¿Quieres una experiencia 100% tuya?</h3>
-            <p className="text-noche-400 max-w-xl">
-              Diseñamos tu tour privado desde cero. Destinos, horarios, transporte y experiencias a tu medida. Sin grupos, sin prisa.
-            </p>
-          </div>
-          <a
-            href={`https://wa.me/529983471258?text=${encodeURIComponent("Hola, me interesa diseñar un tour privado personalizado. ¿Podrían enviarme información sobre opciones, disponibilidad y costos?")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 group flex items-center gap-2.5 px-8 py-4 text-base font-bold rounded-2xl transition-all duration-200 bg-[#25D366] text-white hover:bg-[#1fba59] hover:-translate-y-0.5 shadow-[0_6px_28px_rgba(37,211,102,0.35)] hover:shadow-[0_12px_40px_rgba(37,211,102,0.50)] active:translate-y-0"
-          >
-            <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" />
-            Consultar por WhatsApp
-          </a>
-        </motion.div>
       </div>
     </section>
   );
@@ -406,12 +465,33 @@ const OffersSection: FC = () => {
           {loading
             ? [1, 2, 3].map((i) => <TourSkeleton key={i} />)
             : tours.map((tour, index) => {
-                const prices = Array.isArray(tour.prices) ? tour.prices : tour.prices ? [tour.prices] : [];
-                const originalPrice = prices.length > 0 ? Math.min(...prices.map((p) => p.precio_adulto || 0)) : 0;
-                const salePrice = tour.precio_oferta || Math.round(originalPrice * 0.8);
-                const discount = originalPrice > 0 ? Math.round(((originalPrice - salePrice) / originalPrice) * 100) : 20;
-                const images = Array.isArray(tour.images) ? tour.images : tour.images ? [tour.images] : [];
-                const mainImage = getPublicImageUrl(images.find((img) => img.is_main)?.url || images[0]?.url, "tour_images") ||
+                const prices = Array.isArray(tour.prices)
+                  ? tour.prices
+                  : tour.prices
+                    ? [tour.prices]
+                    : [];
+                const originalPrice =
+                  prices.length > 0
+                    ? Math.min(...prices.map((p) => p.precio_adulto || 0))
+                    : 0;
+                const salePrice =
+                  tour.precio_oferta || Math.round(originalPrice * 0.8);
+                const discount =
+                  originalPrice > 0
+                    ? Math.round(
+                        ((originalPrice - salePrice) / originalPrice) * 100,
+                      )
+                    : 20;
+                const images = Array.isArray(tour.images)
+                  ? tour.images
+                  : tour.images
+                    ? [tour.images]
+                    : [];
+                const mainImage =
+                  getPublicImageUrl(
+                    images.find((img) => img.is_main)?.url || images[0]?.url,
+                    "tour_images",
+                  ) ||
                   "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800";
 
                 return (
@@ -420,7 +500,11 @@ const OffersSection: FC = () => {
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.1 }}
-                    transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
+                    transition={{
+                      delay: index * 0.1,
+                      duration: 0.6,
+                      ease: "easeOut",
+                    }}
                     className="group relative bg-white rounded-3xl overflow-hidden border border-caliza-200 flex flex-col hover:-translate-y-1 transition-all duration-300"
                     style={{ boxShadow: "0 2px 20px rgba(14,75,88,0.07)" }}
                   >
@@ -439,7 +523,9 @@ const OffersSection: FC = () => {
                       <div className="absolute top-4 right-4">
                         <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm">
                           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                          <span className="text-xs font-bold text-noche-800">5.0</span>
+                          <span className="text-xs font-bold text-noche-800">
+                            5.0
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -454,7 +540,9 @@ const OffersSection: FC = () => {
                       <h3 className="text-lg font-bold text-noche-900 mb-2 line-clamp-1 group-hover:text-rose-600 transition-colors">
                         {tour.nombre}
                       </h3>
-                      <p className="text-sm text-noche-500 line-clamp-2 mb-4 leading-relaxed">{tour.descripcion}</p>
+                      <p className="text-sm text-noche-500 line-clamp-2 mb-4 leading-relaxed">
+                        {tour.descripcion}
+                      </p>
 
                       <div className="mt-auto pt-4 border-t border-caliza-100 flex items-end justify-between">
                         <div className="flex items-center gap-1.5 text-xs font-medium text-noche-500">
@@ -462,8 +550,12 @@ const OffersSection: FC = () => {
                           {tour.duracion} {tour.duracion_tipo}
                         </div>
                         <div className="text-right">
-                          <span className="text-xs text-noche-400 line-through block">${originalPrice}</span>
-                          <span className="text-2xl font-extrabold text-rose-600">${salePrice}</span>
+                          <span className="text-xs text-noche-400 line-through block">
+                            ${originalPrice}
+                          </span>
+                          <span className="text-2xl font-extrabold text-rose-600">
+                            ${salePrice}
+                          </span>
                         </div>
                       </div>
 

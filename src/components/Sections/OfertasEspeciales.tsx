@@ -6,7 +6,6 @@ import {
   Star,
   Tag,
   ArrowRight,
-  Percent,
   CalendarDays,
   ShoppingBag,
   Flame,
@@ -356,24 +355,6 @@ const OfertasEspeciales: FC = () => {
               Planes de ensueño con precios rebajados. Aprovecha estas oportunidades limitadas para explorar lo mejor del Caribe Mexicano.
             </motion.p>
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          >
-            <a
-              href="https://wa.me/529983471258?text=Hola!%20Me%20gustar%C3%ADa%20conocer%20las%20ofertas%20especiales%20activas"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest bg-white text-rose-600 border border-rose-200 hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all"
-            >
-              <Percent className="w-3.5 h-3.5" />
-              Solicitar Info
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </motion.div>
         </div>
 
         {/* Grid de Ofertas */}
