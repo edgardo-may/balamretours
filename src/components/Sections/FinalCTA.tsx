@@ -7,6 +7,8 @@ import {
   MapPin,
   Calendar,
   Users,
+  Minus,
+  Plus,
   Send,
   CheckCircle2,
   Loader2,
@@ -116,6 +118,8 @@ const FinalCTA: React.FC = () => {
   /* ── Input class builder ─────────────────────────────────────────────── */
   const inputBase =
     "w-full px-5 py-4 rounded-2xl border bg-white/5 backdrop-blur-sm text-white placeholder:text-white/30 font-medium transition-all duration-200 outline-none";
+  const selectBase =
+    "w-full px-5 py-4 rounded-2xl border bg-noche-900 text-white font-medium transition-all duration-200 outline-none";
   const inputNormal = "border-white/10 focus:border-cenote-400 focus:ring-4 focus:ring-cenote-400/10 focus:bg-white/8";
   const inputError = "border-rose-500/50 ring-2 ring-rose-500/20 focus:border-rose-400 focus:ring-rose-400/20";
 
@@ -362,7 +366,7 @@ const FinalCTA: React.FC = () => {
                       <select
                         id="contact-tour"
                         name="tourId"
-                        className={`${inputBase} ${inputNormal} appearance-none cursor-pointer`}
+                        className={`${selectBase} ${inputNormal} appearance-none cursor-pointer`}
                         value={formData.tourId}
                         onChange={handleChange}
                       >
@@ -401,47 +405,61 @@ const FinalCTA: React.FC = () => {
                     <div className="grid grid-cols-2 gap-5">
                       <motion.div variants={fieldVariants} className="space-y-2">
                         <label
-                          htmlFor="contact-adultos"
                           className="text-xs font-black text-white/50 uppercase tracking-wider flex items-center gap-2"
                         >
                           <Users className="w-3.5 h-3.5 text-cenote-400" />
                           Adultos
                         </label>
-                        <select
-                          id="contact-adultos"
-                          name="adultos"
-                          className={`${inputBase} ${inputNormal} appearance-none cursor-pointer text-center`}
-                          value={formData.adultos}
-                          onChange={handleChange}
-                        >
-                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((n) => (
-                            <option key={n} value={n}>
-                              {n}
-                            </option>
-                          ))}
-                        </select>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            aria-label="Disminuir adultos"
+                            onClick={() => setFormData((prev) => ({ ...prev, adultos: String(Math.max(1, parseInt(prev.adultos) - 1)) }))}
+                            className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors shrink-0"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="flex-1 text-center text-xl font-bold text-white tabular-nums">
+                            {formData.adultos}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label="Aumentar adultos"
+                            onClick={() => setFormData((prev) => ({ ...prev, adultos: String(Math.min(20, parseInt(prev.adultos) + 1)) }))}
+                            className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors shrink-0"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
                       </motion.div>
 
                       <motion.div variants={fieldVariants} className="space-y-2">
                         <label
-                          htmlFor="contact-ninos"
                           className="text-xs font-black text-white/50 uppercase tracking-wider flex items-center gap-2 justify-center"
                         >
                           Niños
                         </label>
-                        <select
-                          id="contact-ninos"
-                          name="ninos"
-                          className={`${inputBase} ${inputNormal} appearance-none cursor-pointer text-center`}
-                          value={formData.ninos}
-                          onChange={handleChange}
-                        >
-                          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                            <option key={n} value={n}>
-                              {n}
-                            </option>
-                          ))}
-                        </select>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            aria-label="Disminuir niños"
+                            onClick={() => setFormData((prev) => ({ ...prev, ninos: String(Math.max(0, parseInt(prev.ninos) - 1)) }))}
+                            className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors shrink-0"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="flex-1 text-center text-xl font-bold text-white tabular-nums">
+                            {formData.ninos}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label="Aumentar niños"
+                            onClick={() => setFormData((prev) => ({ ...prev, ninos: String(Math.min(10, parseInt(prev.ninos) + 1)) }))}
+                            className="w-12 h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors shrink-0"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
                       </motion.div>
                     </div>
 
